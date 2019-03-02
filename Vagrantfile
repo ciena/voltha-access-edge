@@ -13,14 +13,11 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "shell", inline: <<-SHELL
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     apt-get update
-    apt-get install -y curl git mercurial python-pip mininet make binutils bison gcc build-essential openvswitch-switch sshpass
+    apt-get install -y curl git mercurial python-pip mininet make binutils bison gcc build-essential openvswitch-switch sshpass docker-ce docker-ce-cli containerd.io
     pip install -r /vagrant/requirements.txt
-
-    # Install Docker
-    curl -s -S -L -o /tmp/docker-install http://get.docker.io
-    chmod 755 /tmp/docker-install
-    CHANNEL=stable /tmp/docker-install
     usermod -aG docker vagrant
   SHELL
 
@@ -44,6 +41,8 @@ Vagrant.configure("2") do |config|
       mgt.vm.hostname="management"
       mgt.vm.network "private_network", ip: "192.168.33.11"
       mgt.vm.provision "shell", inline: <<-MGT
+          snap install kubectl --classic
+          snap install helm --classic
           ip link add gre1 type gretap local 192.168.33.11 remote 192.168.33.10
           ip link set gre1 address c0:ff:ee:00:01:03
           ip link set gre1 up

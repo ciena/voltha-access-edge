@@ -11,3 +11,31 @@ inject-vms:
 
 post-onos-config:
 	curl --fail -X POST -HContent-type:application/json http://karaf:karaf@127.0.0.1:8181/onos/v1/network/configuration -d@/vagrant/netcfg.json
+
+management-post-install:
+	/vagrant/management-post-install.sh
+
+post-install: $(shell hostname)-post-install
+
+helm-ponnet:
+	helm install -n ponnet cord/ponnet
+
+helm-etcd-operator:
+	helm install -n etcd-operator stable/etcd-operator --version 0.8.0
+
+helm-kafka:
+	 helm install --version 0.8.8 \
+		--set configurationOverrides."offsets\.topic\.replication\.factor"=1 \
+		--set configurationOverrides."log\.retention\.hours"=4 \
+		--set configurationOverrides."log\.message\.timestamp\.type"="LogAppendTime" \
+		--set replicas=1 \
+		--set persistence.enabled=false \
+		--set zookeeper.replicaCount=1 \
+		--set zookeeper.persistence.enabled=false \
+		-n cord-kafka incubator/kafka
+
+helm-voltha: helm-ponnet helm-kafka helm-etcd-operator
+	@echo "Waiting for etcd-operator to initialize ..." 
+	@until test $(shell kubectl get crd | grep -c etcd) -eq 3; do echo "waiting ..."; sleep 2; done
+	helm install -n voltha cord/voltha
+
