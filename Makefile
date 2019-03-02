@@ -12,6 +12,10 @@ inject-vms:
 post-onos-config:
 	curl --fail -X POST -HContent-type:application/json http://karaf:karaf@127.0.0.1:8181/onos/v1/network/configuration -d@/vagrant/netcfg.json
 
+ui-tunnels:
+	vagrant ssh network -- -L 0.0.0.0:8181:127.0.0.1:8181 -f -n -N -q -T
+	vagrant ssh management -- -L 0.0.0.0:8443:192.168.33.11:443 -L 0.0.0.0:8080:19268.33.11:80 -f -n -N -q -T
+
 management-post-install:
 	/vagrant/management-post-install.sh
 
