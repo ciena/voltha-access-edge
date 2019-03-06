@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 node=${1:-management}
-rancher_ver=${2:-stable}
+rancher_ver=${2:-v1.6.25}
 major=$(echo $rancher_ver | cut -d "." -f1)
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"

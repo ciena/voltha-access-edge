@@ -5,7 +5,7 @@
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
-rancher_version = ENV["RANCHER_VERSION"] || "stable"
+rancher_version = ENV["RANCHER_VERSION"] || "v1.6.25"
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/xenial64"
   config.vm.provider "virtualbox" do |vb|
