@@ -15,3 +15,5 @@ for C in compute1 compute2 compute3; do
     scp /home/vagrant/.kube/config "$C:.kube/config"
     ssh $C sudo cp /home/vagrant/.kube/config /etc/kubernetes/admin.conf
 done
+
+sudo snap install helm --classic
