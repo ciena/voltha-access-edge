@@ -14,7 +14,9 @@ post-onos-config:
 
 ui-tunnels:
 	vagrant ssh network -- -L 0.0.0.0:8181:127.0.0.1:8181 -f -n -N -q -T
-	vagrant ssh management -- -L 0.0.0.0:8443:192.168.33.11:443 -L 0.0.0.0:8080:19268.33.11:80 -f -n -N -q -T
+
+deploy-k8s:
+	/vagrant/deploy-k8s.sh
 
 management-post-install:
 	/vagrant/management-post-install.sh
@@ -38,8 +40,8 @@ helm-kafka:
 		--set zookeeper.persistence.enabled=false \
 		-n cord-kafka incubator/kafka
 
-helm-voltha: helm-ponnet helm-kafka helm-etcd-operator
+helm-voltha: # helm-kafka helm-etcd-operator #helm-ponnet helm-kafka helm-etcd-operator
 	@echo "Waiting for etcd-operator to initialize ..." 
-	@until test $(shell kubectl get crd | grep -c etcd) -eq 3; do echo "waiting ..."; sleep 2; done
+	@until test $$(kubectl get crd 2>/dev/null | grep -c etcd) -eq 3; do echo "waiting ..."; sleep 2; done
 	helm install -n voltha cord/voltha
 
