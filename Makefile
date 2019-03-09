@@ -40,7 +40,10 @@ helm-kafka:
 		--set zookeeper.persistence.enabled=false \
 		-n cord-kafka incubator/kafka
 
-helm-voltha: # helm-kafka helm-etcd-operator #helm-ponnet helm-kafka helm-etcd-operator
+helm-onos:
+	helm install -n onos cord/onos
+
+helm-voltha: #helm-ponnet helm-kafka helm-etcd-operator helm-onos
 	@echo "Waiting for etcd-operator to initialize ..." 
 	@until test $$(kubectl get crd 2>/dev/null | grep -c etcd) -eq 3; do echo "waiting ..."; sleep 2; done
 	helm install -n voltha cord/voltha
