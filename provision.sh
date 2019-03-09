@@ -8,6 +8,7 @@ apt-get update
 apt-get install -y curl git mercurial python-pip mininet make binutils bison gcc build-essential openvswitch-switch sshpass containerd.io docker-ce docker-ce-cli
 usermod -aG docker vagrant
 pip install -r /vagrant/requirements.txt
+echo "search default.svc.cluster.local voltha.svc.cluster.local kube-system.svc.cluster.local" >> /etc/resolvconf/resolv.conf.d/base
 mkdir -p /home/vagrant/.ssh
 cp /vagrant/ssh/id_rsa /vagrant/ssh/id_rsa.pub /vagrant/ssh/config /home/vagrant/.ssh/
 cat /vagrant/ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
@@ -30,4 +31,9 @@ fi
 
 if [[ "$node" =~ ^compute[123]$ ]]; then
     snap install kubectl --classic
+fi
+
+if [ "$node" = "olt" ]; then
+docker run -tid --rm --net=host --name=olt voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type OLT -onus 4 -external_if gre1 -internal_if enp0s8 -vcore_endpoint vcore  -verbose -promiscuous
+docker run -tid --net=host --rm --name=onu  voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type ONU -onus 1 -parent_addr 192.168.33.15 -grpc_port 50061 -internal_if enp0s8  -external_if gre1  -verbose -parent_port 50060 -promiscuous -grpc_addr 192.168.33.15
 fi

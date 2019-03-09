@@ -151,6 +151,12 @@
                 "ips": [ "10.1.4.254/24" ],
                 "vlan-untagged": 10
             } ]
+        },
+        "of:0000000000000006/5": {
+            "interfaces": [ {
+                "ips": [ "10.1.4.254/24" ],
+                "vlan-untagged": 10
+            } ]
         }
     },
     "hosts" : {
@@ -205,7 +211,7 @@
     "C0:FF:EE:00:04:02/None" : {
       "basic" : {
         "name" : "h4",
-        "gridX" : 950.0,
+        "gridX" : 900.0,
         "gridY" : 600.0,
         "locType" : "grid"
       }
@@ -213,7 +219,15 @@
     "C0:FF:EE:00:04:03/None" : {
       "basic" : {
         "name" : "compute3",
-        "gridX" : 1050.0,
+        "gridX" : 1000.0,
+        "gridY" : 600.0,
+        "locType" : "grid"
+      }
+    },
+    "C0:FF:EE:00:04:04/None" : {
+      "basic" : {
+        "name" : "olt",
+        "gridX" : 1100.0,
         "gridY" : 600.0,
         "locType" : "grid"
       }

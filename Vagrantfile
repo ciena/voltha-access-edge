@@ -25,6 +25,8 @@ Vagrant.configure("2") do |config|
           ip link set s5-gre1 up
           ip link add s6-gre1 type gretap local 192.168.33.10 remote 192.168.33.14
           ip link set s6-gre1 up
+          ip link add s6-gre2 type gretap local 192.168.33.10 remote 192.168.33.15
+          ip link set s6-gre2 up
           ufw disable
       NET
       net.vm.provision "shell", path: "provision.sh", args: [ "network", rancher_version ]
@@ -92,6 +94,26 @@ Vagrant.configure("2") do |config|
  	  ufw disable
       C3
       c3.vm.provision "shell", path: "provision.sh", args: [ "compute3", rancher_version ]
+  end
+
+  config.vm.define "olt" do |olt|
+      olt.vm.hostname="olt"
+      olt.vm.provider "virtualbox" do |vb|
+          vb.gui = false
+          vb.memory = "2048"
+      end
+      olt.vm.network "private_network", ip: "192.168.33.15"
+      olt.vm.provision "shell", inline: <<-OLT
+          ip link add gre1 type gretap local 192.168.33.15 remote 192.168.33.10
+          ip link set gre1 address c0:ff:ee:00:04:04
+          ip link set gre1 up
+          ip addr add 10.1.4.4/24 dev gre1
+          ip route add 10.1.1.0/24 via 10.1.4.254
+          ip route add 10.1.2.0/24 via 10.1.4.254
+          ip route add 10.1.3.0/24 via 10.1.4.254
+ 	  ufw disable
+      OLT
+      olt.vm.provision "shell", path: "provision.sh", args: [ "olt", rancher_version ]
   end
 
 end
