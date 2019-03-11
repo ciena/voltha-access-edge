@@ -12,6 +12,9 @@ inject-vms:
 post-onos-config:
 	curl --fail -X POST -HContent-type:application/json http://karaf:karaf@127.0.0.1:8181/onos/v1/network/configuration -d@/vagrant/netcfg.json
 
+test-fabric:
+	@./test_fabric.sh
+
 ui-tunnels:
 	vagrant ssh network -- -L 0.0.0.0:8181:127.0.0.1:8181 -f -n -N -q -T
 
