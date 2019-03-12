@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-VMS="management compute1 compute2 compute3 olt"
-IPS="10.1.1.3 10.1.2.3 10.1.3.3 10.1.4.3 10.1.4.4"
+VMS="management compute1 compute2 compute3 olt backoffice"
+IPS="10.1.1.3 10.1.2.3 10.1.3.3 10.1.4.3 10.1.4.4 10.1.5.3"
 GREEN='\033[1;32m'
 RED='\033[1;31m'
 RESET='\033[1;0m'

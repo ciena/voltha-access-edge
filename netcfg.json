@@ -13,7 +13,7 @@
                 "name": "Spine1",
                 "driver": "ofdpa-ovs",
                 "gridX" : 200.0,
-                "gridY" : 200.0,
+                "gridY" : 500.0,
                 "locType" : "grid"
             }
         },
@@ -30,7 +30,7 @@
                 "name": "Spine2",
                 "driver": "ofdpa-ovs",
                 "gridX" : 600.0,
-                "gridY" : 200.0,
+                "gridY" : 500.0,
                 "locType" : "grid"
             }
         },
@@ -47,7 +47,7 @@
                 "name": "Leaf1",
                 "driver": "ofdpa-ovs",
                 "gridX" : -200.0,
-                "gridY" : 400.0,
+                "gridY" : 700.0,
                 "locType" : "grid"
             }
         },
@@ -64,7 +64,7 @@
                 "name": "Leaf2",
                 "driver": "ofdpa-ovs",
                 "gridX" : 200.0,
-                "gridY" : 400.0,
+                "gridY" : 700.0,
                 "locType" : "grid"
             }
         },
@@ -81,7 +81,7 @@
                 "name": "Leaf3",
                 "driver": "ofdpa-ovs",
                 "gridX" : 600.0,
-                "gridY" : 400.0,
+                "gridY" : 700.0,
                 "locType" : "grid"
             }
         },
@@ -98,7 +98,24 @@
                 "name": "Leaf4",
                 "driver": "ofdpa-ovs",
                 "gridX" : 1000.0,
-                "gridY" : 400.0,
+                "gridY" : 700.0,
+                "locType" : "grid"
+            }
+        },
+        "of:0000000000000007": {
+            "segmentrouting": {
+                "name": "Aggregation",
+                "ipv4NodeSid": 107,
+                "ipv4Loopback": "192.168.0.207",
+                "routerMac": "c0:ff:ee:00:00:07",
+                "isEdgeRouter": true,
+                "adjacencySids": []
+            },
+            "basic": {
+                "name": "Aggregation",
+                "driver": "ofdpa-ovs",
+                "gridX" : 400.0,
+                "gridY" : 300.0,
                 "locType" : "grid"
             }
         }
@@ -157,14 +174,27 @@
                 "ips": [ "10.1.4.254/24" ],
                 "vlan-untagged": 10
             } ]
+        },
+        "of:0000000000000007/3": {
+            "interfaces": [ {
+                "ips": [ "10.1.5.254/24" ],
+                "vlan-untagged": 10
+            } ]
+        },
+        "of:0000000000000007/4": {
+            "interfaces": [ {
+                "ips": [ "10.1.5.254/24" ],
+                "vlan-untagged": 10
+            } ]
         }
+
     },
     "hosts" : {
     "C0:FF:EE:00:01:02/None" : {
       "basic" : {
         "name" : "h1",
         "gridX" : -250.0,
-        "gridY" : 600.0,
+        "gridY" : 900.0,
         "locType" : "grid"
       }
     },
@@ -172,7 +202,7 @@
       "basic" : {
         "name" : "management",
         "gridX" : -150.0,
-        "gridY" : 600.0,
+        "gridY" : 900.0,
         "locType" : "grid"
       }
     },
@@ -180,7 +210,7 @@
       "basic" : {
         "name" : "h2",
         "gridX" : 150.0,
-        "gridY" : 600.0,
+        "gridY" : 900.0,
         "locType" : "grid"
       }
     },
@@ -188,7 +218,7 @@
       "basic" : {
         "name" : "compute1",
         "gridX" : 250.0,
-        "gridY" : 600.0,
+        "gridY" : 900.0,
         "locType" : "grid"
       }
     },
@@ -196,7 +226,7 @@
       "basic" : {
         "name" : "h3",
         "gridX" : 550.0,
-        "gridY" : 600.0,
+        "gridY" : 900.0,
         "locType" : "grid"
       }
     },
@@ -204,7 +234,7 @@
       "basic" : {
         "name" : "compute2",
         "gridX" : 650.0,
-        "gridY" : 600.0,
+        "gridY" : 900.0,
         "locType" : "grid"
       }
     },
@@ -212,7 +242,7 @@
       "basic" : {
         "name" : "h4",
         "gridX" : 900.0,
-        "gridY" : 600.0,
+        "gridY" : 900.0,
         "locType" : "grid"
       }
     },
@@ -220,7 +250,7 @@
       "basic" : {
         "name" : "compute3",
         "gridX" : 1000.0,
-        "gridY" : 600.0,
+        "gridY" : 900.0,
         "locType" : "grid"
       }
     },
@@ -228,7 +258,23 @@
       "basic" : {
         "name" : "olt",
         "gridX" : 1100.0,
-        "gridY" : 600.0,
+        "gridY" : 900.0,
+        "locType" : "grid"
+      }
+    },
+    "C0:FF:EE:00:05:02/None" : {
+      "basic" : {
+        "name" : "h5",
+        "gridX" : 350.0,
+        "gridY" : 100.0,
+        "locType" : "grid"
+      }
+    },
+    "C0:FF:EE:00:05:03/None" : {
+      "basic" : {
+        "name" : "backoffice",
+        "gridX" : 450.0,
+        "gridY" : 100.0,
         "locType" : "grid"
       }
     }

@@ -27,6 +27,8 @@ Vagrant.configure("2") do |config|
           ip link set s6-gre1 up
           ip link add s6-gre2 type gretap local 192.168.33.10 remote 192.168.33.15
           ip link set s6-gre2 up
+          ip link add s7-gre1 type gretap local 192.168.33.10 remote 192.168.33.16
+          ip link set s7-gre1 up
           ufw disable
       NET
       net.vm.provision "shell", path: "provision.sh", args: [ "network", rancher_version ]
@@ -43,6 +45,7 @@ Vagrant.configure("2") do |config|
           ip route add 10.1.2.0/24 via 10.1.1.254
           ip route add 10.1.3.0/24 via 10.1.1.254
           ip route add 10.1.4.0/24 via 10.1.1.254
+          ip route add 10.1.5.0/24 via 10.1.1.254
 	  ufw disable 
       MGT
       mgt.vm.provision "shell", path: "provision.sh", args: [ "management", rancher_version ]
@@ -59,6 +62,7 @@ Vagrant.configure("2") do |config|
           ip route add 10.1.1.0/24 via 10.1.2.254
           ip route add 10.1.3.0/24 via 10.1.2.254
           ip route add 10.1.4.0/24 via 10.1.2.254
+          ip route add 10.1.5.0/24 via 10.1.2.254
  	  ufw disable
       C1
       c1.vm.provision "shell", path: "provision.sh", args: [ "compute1", rancher_version ]
@@ -75,6 +79,7 @@ Vagrant.configure("2") do |config|
           ip route add 10.1.1.0/24 via 10.1.3.254
           ip route add 10.1.2.0/24 via 10.1.3.254
           ip route add 10.1.4.0/24 via 10.1.3.254
+          ip route add 10.1.5.0/24 via 10.1.3.254
  	  ufw disable
       C2
       c2.vm.provision "shell", path: "provision.sh", args: [ "compute2", rancher_version ]
@@ -91,6 +96,8 @@ Vagrant.configure("2") do |config|
           ip route add 10.1.1.0/24 via 10.1.4.254
           ip route add 10.1.2.0/24 via 10.1.4.254
           ip route add 10.1.3.0/24 via 10.1.4.254
+          ip route add 10.1.4.4/32 via 10.1.4.254
+          ip route add 10.1.5.0/24 via 10.1.4.254
  	  ufw disable
       C3
       c3.vm.provision "shell", path: "provision.sh", args: [ "compute3", rancher_version ]
@@ -111,9 +118,32 @@ Vagrant.configure("2") do |config|
           ip route add 10.1.1.0/24 via 10.1.4.254
           ip route add 10.1.2.0/24 via 10.1.4.254
           ip route add 10.1.3.0/24 via 10.1.4.254
+          ip route add 10.1.4.3/32 via 10.1.4.254
+          ip route add 10.1.5.0/24 via 10.1.4.254
  	  ufw disable
       OLT
       olt.vm.provision "shell", path: "provision.sh", args: [ "olt", rancher_version ]
+  end
+
+  config.vm.define "backoffice" do |olt|
+      olt.vm.hostname="backoffice"
+      olt.vm.provider "virtualbox" do |vb|
+          vb.gui = false
+          vb.memory = "2048"
+      end
+      olt.vm.network "private_network", ip: "192.168.33.16"
+      olt.vm.provision "shell", inline: <<-BO
+          ip link add gre1 type gretap local 192.168.33.16 remote 192.168.33.10
+          ip link set gre1 address c0:ff:ee:00:05:03
+          ip link set gre1 up
+          ip addr add 10.1.5.3/24 dev gre1
+          ip route add 10.1.1.0/24 via 10.1.5.254
+          ip route add 10.1.2.0/24 via 10.1.5.254
+          ip route add 10.1.3.0/24 via 10.1.5.254
+          ip route add 10.1.4.0/24 via 10.1.5.254
+          ufw disable
+      BO
+      olt.vm.provision "shell", path: "provision.sh", args: [ "backoffice", rancher_version ]
   end
 
 end

@@ -4,7 +4,7 @@ help:
 	@echo "post-onos-config     - post the configuration to ONOS"
 
 start-network:
-	sudo ./lsnet.py --controller=remote,ip=127.0.0.1,port=6653 --leaves=4 --spines=2 --hosts=1 --wait --ping --onos=http://karaf:karaf@localhost:8181
+	sudo ./lsnet.py --controller=remote,ip=127.0.0.1,port=6653 --leaves=5 --spines=2 --hosts=1 --wait --ping --onos=http://karaf:karaf@localhost:8181
 
 inject-vms:
 	sudo /vagrant/add-ports.sh
