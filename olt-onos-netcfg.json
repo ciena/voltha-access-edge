@@ -1,0 +1,61 @@
+{
+  "devices": {
+    "of:0001aabbccddeeff": {
+      "basic": {
+        "driver": "voltha"
+      },
+      "accessDevice": {
+        "uplink": "0",
+        "vlan": "128"
+      }
+    }
+  },
+  "apps": {
+    "org.opencord.aaa": {
+      "AAA": {
+        "radiusIp": "10.1.5.3",
+        "nasIp": "10.1.5.3",
+        "radiusServerPort": "1812",
+        "radiusSecret": "SECRET",
+        "bindings": [
+          {
+            "mac": "aa:bb:cc:dd:ee:ff",
+            "s-tag": 2,
+            "c-tag": 128,
+            "nas_port_id": "PSMO12345678"
+          }
+        ]
+      }
+    },
+    "org.opencord.sadis": {
+      "sadis": {
+        "integration": {
+          "cache": {
+            "enabled": false,
+            "maxsize": 50,
+            "ttl": "PT0m"
+          }
+        },
+        "entries": [
+          {
+            "id": "PSMO12345678",
+            "cTag": 128,
+            "sTag": 2,
+            "nasPortId": "PSMO12345678"
+          },
+          {
+            "id": "10.1.4.4:50060",
+            "hardwareIdentifier": "aa:bb:cc:dd:ee:ff",
+            "ipAddress": "10.233.111.16",
+            "nasId": "10.1.4.4:50060"
+          },
+          {
+            "id": "10.1.4.4:50060",
+            "uplinkPort": 2
+          }
+        ]
+      }
+    },
+    "org.onosproject.dhcp-relay": {}
+  }
+}
