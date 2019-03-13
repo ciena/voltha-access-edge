@@ -37,3 +37,10 @@ if [ "$node" = "olt" ]; then
     docker run -tid --rm --net=host --name=olt voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type OLT -onus 4 -external_if gre1 -internal_if enp0s8 -vcore_endpoint vcore  -verbose -promiscuous
     docker run -tid --net=host --rm --name=onu  voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type ONU -onus 1 -parent_addr 192.168.33.15 -grpc_port 50061 -internal_if enp0s8  -external_if gre1  -verbose -parent_port 50060 -promiscuous -grpc_addr 192.168.33.15
 fi
+
+if [ "$node" = "backoffice" ]; then
+    cp -r /vagrant/dhcpd /vagrant/radius /home/vagrant
+    chown -R vagrant:vagrant /home/vagrant/dhcpd /home/vagrant/radius
+    docker swarm init --advertise-addr 10.1.5.3
+    docker stack deploy --compose-file /vagrant/backoffice-stack.yml backoffice
+fi
