@@ -18,7 +18,7 @@ chmod 600 /home/vagrant/.ssh/id_rsa /home/vagrant/.ssh/id_rsa.pub /home/vagrant/
 
 if [ "$node" = "network" ]; then
     echo "Starting ONOS on $node"
-    docker run -tid --name onos --rm -p 8101:8101 -p 8181:8181 -p 6653:6653 -e ONOS_APPS=openflow,segmentrouting,layout ciena/onos:1.15.1-SNAPSHOT
+    docker run -tid --name onos --rm -p 8101:8101 -p 8181:8181 -p 6653:6653 -e ONOS_APPS=openflow,segmentrouting,proxyarp,layout ciena/onos:1.15.1-SNAPSHOT
 fi
 
 if [ "$node" = "management" ]; then
@@ -34,6 +34,6 @@ if [[ "$node" =~ ^compute[123]$ ]]; then
 fi
 
 if [ "$node" = "olt" ]; then
-docker run -tid --rm --net=host --name=olt voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type OLT -onus 4 -external_if gre1 -internal_if enp0s8 -vcore_endpoint vcore  -verbose -promiscuous
-docker run -tid --net=host --rm --name=onu  voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type ONU -onus 1 -parent_addr 192.168.33.15 -grpc_port 50061 -internal_if enp0s8  -external_if gre1  -verbose -parent_port 50060 -promiscuous -grpc_addr 192.168.33.15
+    docker run -tid --rm --net=host --name=olt voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type OLT -onus 4 -external_if gre1 -internal_if enp0s8 -vcore_endpoint vcore  -verbose -promiscuous
+    docker run -tid --net=host --rm --name=onu  voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type ONU -onus 1 -parent_addr 192.168.33.15 -grpc_port 50061 -internal_if enp0s8  -external_if gre1  -verbose -parent_port 50060 -promiscuous -grpc_addr 192.168.33.15
 fi

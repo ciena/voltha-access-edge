@@ -96,7 +96,6 @@ Vagrant.configure("2") do |config|
           ip route add 10.1.1.0/24 via 10.1.4.254
           ip route add 10.1.2.0/24 via 10.1.4.254
           ip route add 10.1.3.0/24 via 10.1.4.254
-          ip route add 10.1.4.4/32 via 10.1.4.254
           ip route add 10.1.5.0/24 via 10.1.4.254
  	  ufw disable
       C3
@@ -118,7 +117,6 @@ Vagrant.configure("2") do |config|
           ip route add 10.1.1.0/24 via 10.1.4.254
           ip route add 10.1.2.0/24 via 10.1.4.254
           ip route add 10.1.3.0/24 via 10.1.4.254
-          ip route add 10.1.4.3/32 via 10.1.4.254
           ip route add 10.1.5.0/24 via 10.1.4.254
  	  ufw disable
       OLT

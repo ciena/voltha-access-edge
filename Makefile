@@ -18,6 +18,9 @@ test-fabric:
 ui-tunnels:
 	vagrant ssh network -- -L 0.0.0.0:8181:127.0.0.1:8181 -f -n -N -q -T
 
+olt-onos-ui-tunnel:
+	vagrant ssh management -- -L 0.0.0.0:9191:onos-ui:8181 -f -n -N -q -T
+
 deploy-k8s:
 	/vagrant/deploy-k8s.sh
 
