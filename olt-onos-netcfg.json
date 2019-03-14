@@ -1,6 +1,6 @@
 {
   "devices": {
-    "of:0001aabbccddeeff": {
+    "of:0000aabbccddeeff": {
       "basic": {
         "driver": "voltha"
       },
@@ -56,6 +56,11 @@
         ]
       }
     },
-    "org.onosproject.dhcp-relay": {}
+    "org.onosproject.dhcp-relay": {
+      "dhcpl2relay" : {
+        "dhcpServerConnectPoints" : [ "of:00000000000000b2/2" ],
+        "useOltUplinkForServerPktInOut" : true
+      }
+    }
   }
 }

@@ -46,30 +46,43 @@ helm-kafka:
 $(HOME)/onos-apps:
 	mkdir -p $(HOME)/onos-apps
 
-$(HOME)/onos-apps/sadis-app-3.0.0.oar:
-	curl --fail -sSL https://repo.maven.apache.org/maven2/org/opencord/sadis-app/3.0.0/sadis-app-3.0.0.oar -o $(HOME)/onos-apps/sadis-app-3.0.0.oar
+CONFIG_VER=1.4.0
+SADIS_VER=2.1.0
+OLT_VER=1.4.1
+AAA_VER=1.6.0
+DHCP_VER=1.5.0
 
-$(HOME)/onos-apps/aaa-1.8.0.oar:
-	curl --fail -sSL https://repo.maven.apache.org/maven2/org/opencord/aaa/1.8.0/aaa-1.8.0.oar -o $(HOME)/onos-apps/aaa-1.8.0.oar
+$(HOME)/onos-apps/cord-config-$(CONFIG_VER).oar:
+	curl --fail -sSL https://repo.maven.apache.org/maven2/org/opencord/cord-config/$(CONFIG_VER)/cord-config-$(CONFIG_VER).oar -o $(HOME)/onos-apps/cord-config-$(CONFIG_VER).oar
 
-$(HOME)/onos-apps/olt-app-2.1.0.oar:
-	curl --fail -sSL https://repo.maven.apache.org/maven2/org/opencord/olt-app/2.1.0/olt-app-2.1.0.oar -o $(HOME)/onos-apps/olt-app-2.1.0.oar
+$(HOME)/onos-apps/sadis-app-$(SADIS_VER).oar:
+	curl --fail -sSL https://repo.maven.apache.org/maven2/org/opencord/sadis-app/$(SADIS_VER)/sadis-app-$(SADIS_VER).oar -o $(HOME)/onos-apps/sadis-app-$(SADIS_VER).oar
+
+$(HOME)/onos-apps/aaa-$(AAA_VER).oar:
+	curl --fail -sSL https://repo.maven.apache.org/maven2/org/opencord/aaa/$(AAA_VER)/aaa-$(AAA_VER).oar -o $(HOME)/onos-apps/aaa-$(AAA_VER).oar
+
+$(HOME)/onos-apps/olt-app-$(OLT_VER).oar:
+	curl --fail -sSL https://repo.maven.apache.org/maven2/org/opencord/olt-app/$(OLT_VER)/olt-app-$(OLT_VER).oar -o $(HOME)/onos-apps/olt-app-$(OLT_VER).oar
 
 $(HOME)/onos-apps/dhcpl2relay-1.5.0.oar:
-	curl --fail -sSL https://repo.maven.apache.org/maven2/org/opencord/dhcpl2relay/1.5.0/dhcpl2relay-1.5.0.oar -o $(HOME)/onos-apps/dhcpl2relay-1.5.0.oar
+	curl --fail -sSL https://repo.maven.apache.org/maven2/org/opencord/dhcpl2relay/$(DHCP_VER)/dhcpl2relay-$(DHCP_VER).oar -o $(HOME)/onos-apps/dhcpl2relay-$(DHCP_VER).oar
 
-download-onos-apps: $(HOME)/onos-apps $(HOME)/onos-apps/sadis-app-3.0.0.oar $(HOME)/onos-apps/aaa-1.8.0.oar $(HOME)/onos-apps/olt-app-2.1.0.oar $(HOME)/onos-apps/dhcpl2relay-1.5.0.oar
+download-onos-apps: $(HOME)/onos-apps $(HOME)/onos-apps/cord-config-$(CONFIG_VER).oar $(HOME)/onos-apps/sadis-app-$(SADIS_VER).oar $(HOME)/onos-apps/aaa-$(AAA_VER).oar $(HOME)/onos-apps/olt-app-$(OLT_VER).oar $(HOME)/onos-apps/dhcpl2relay-$(DHCP_VER).oar
 
 helm-onos: download-onos-apps
 	helm install -n onos cord/onos
-	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/sadis-app-3.0.0.oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'SADIS' ONOS application ..."; sleep 1; done
-	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/aaa-1.8.0.oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'AAA' ONOS application ..."; sleep 1; done
-	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/olt-app-2.1.0.oar 2>/dev/null | tail -1) -eq 409; do echo "Install 'OLT' ONOS application ..."; sleep 1; done
-	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/dhcpl2relay-1.5.0.oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'DHCP L2 Relay' ONOS application ..."; sleep 1; done
+	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/cord-config-$(CONFIG_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'CONFIG' ONOS application ..."; sleep 1; done
+	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/sadis-app-$(SADIS_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'SADIS' ONOS application ..."; sleep 1; done
+	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/olt-app-$(OLT_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Install 'OLT' ONOS application ..."; sleep 1; done
+	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/aaa-$(AAA_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'AAA' ONOS application ..."; sleep 1; done
+	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/dhcpl2relay-$(DHCP_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'DHCP L2 Relay' ONOS application ..."; sleep 1; done
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/json http://onos-ui:8181/onos/v1/network/configuration --data @/vagrant/olt-onos-netcfg.json 2>/dev/null | tail -1) -eq 200; do echo "Configuring VOLTHA ONOS ..."; sleep 1; done
 
 helm-voltha: # helm-kafka helm-etcd-operator helm-onos
 	@echo "Waiting for etcd-operator to initialize ..." 
 	@until test $$(kubectl get crd 2>/dev/null | grep -c etcd) -eq 3; do echo "waiting ..."; sleep 2; done
 	helm install -n voltha cord/voltha
+
+test-authenticate:
+	docker exec -ti rg /vagrant/test/rg-authenticate.sh
 
