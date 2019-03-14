@@ -71,5 +71,5 @@ if [ "$node" = "olt" ]; then
     docker start olt
     docker start onu
     docker start rg
-    echo 8 sudo tee /sys/class/net/onu_rg/bridge/group_fwd_mask >/dev/null
+    echo 8 | sudo tee /sys/class/net/onu_rg/bridge/group_fwd_mask >/dev/null
 fi
