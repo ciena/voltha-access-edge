@@ -13,9 +13,25 @@
 # limitations under the License.
 
 help:
+	@echo "Available targets:"
+	@echo ""
+	@echo "help                 - this list"
 	@echo "start-network        - start mininet (in the forground)"
 	@echo "inject-vms           - inject the VM interfaces into the leaf switches"
 	@echo "post-onos-config     - post the configuration to ONOS"
+	@echo "test-fabric          - tests the p2p connectivity of the fabric"
+	@echo "ui-tunnels           - create port forwarding tunnels for application UIs"
+	@echo "olt-onos-ui-tunnel   - create the port forwarding tunnel for the VOLTHA UI instance"
+	@echo "deploy-k8s           - deploy Kubernetes to the compute cluster"
+	@echo "post-install         - post install updated for the management VM"
+	@echo "helm-etcd-operator   - use helm to deploy Etcd cluster"
+	@echo "helm-kafka           - use helm to deploy Kafka"
+	@echo "helm-onos            - use helm to deploy ONOS"
+	@echo "helm-voltha          - use helm to deploy VOLTHA"
+	@echo "test-authenticate    - test EAPOL authentication from subscriber VM"
+	@echo ""
+	@echo "Please see the README.md file to understand how to use the"
+	@echo "various targets to deploy a simulated VOLTHA environment."
 
 start-network:
 	sudo ./lsnet.py --controller=remote,ip=127.0.0.1,port=6653 --leaves=5 --spines=2 --hosts=1 --wait --ping --onos=http://karaf:karaf@localhost:8181
