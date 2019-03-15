@@ -1,0 +1,57 @@
+# This is an experimental docker-compose file to start the containers that represent a subscriber (OLT, ONU, and RG). This currently
+# does not work because the order in which containers are connected to the custom networks is non-deterministic and the parameters
+# to ponsimv2 required explicit interfaces to be named. This seems to be a known issue with docker-compose. When this issue gets 
+# resolved using this file can be re-visited.
+
+version: '3.5'
+services:
+  olt:
+    image: voltha/voltha-ponsim:1.6.0
+    networks: 
+      default:
+      olt_onu:
+        ipv4_address: 192.168.55.2
+    ports:
+      - 50060:50060/tcp
+    command: /app/ponsim -device_type OLT -onus 4 -external_if eth0 -internal_if eth1 -vcore_endpoint vcore -verbose -promiscuous
+
+  onu:
+    image: voltha/voltha-ponsim:1.6.0
+    networks: 
+      default:
+      olt_onu:
+        ipv4_address: 192.168.55.3
+      onu_rg:
+        ipv4_address: 192.168.56.2
+    command: /app/ponsim -device_type ONU -onus 1 -parent_addr 192.168.55.2 -grpc_port 50061 -external_if eth2 -internal_if eth1  -verbose -parent_port 50060 -promiscuous -grpc_addr 192.168.55.3
+
+  rg:
+    image: voltha/voltha-tester:1.6.0
+    networks: 
+      default:
+      onu_rg:
+        ipv4_address: 192.168.56.3
+    command: /bin/bash -c 'while true; do sleep 3600; done'
+    volumes:
+      - /vagrant:/vagrant
+
+networks:
+  default:
+  olt_onu:
+    driver: bridge
+    name: olt_onu
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.55.0/24
+    driver_opts:
+      com.docker.network.bridge.name: onu_onu
+  onu_rg:
+    driver: bridge
+    name: onu_rg
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.56.0/24
+    driver_opts:
+      com.docker.network.bridge.name: onu_rg

@@ -33,11 +33,6 @@ if [[ "$node" =~ ^compute[123]$ ]]; then
     snap install kubectl --classic
 fi
 
-if [ "$node" = "olt" ]; then
-    docker run -tid --rm --net=host --name=olt voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type OLT -onus 4 -external_if gre1 -internal_if enp0s8 -vcore_endpoint vcore  -verbose -promiscuous
-    docker run -tid --net=host --rm --name=onu  voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type ONU -onus 1 -parent_addr 192.168.33.15 -grpc_port 50061 -internal_if enp0s8  -external_if gre1  -verbose -parent_port 50060 -promiscuous -grpc_addr 192.168.33.15
-fi
-
 if [ "$node" = "backoffice" ]; then
     cp -r /vagrant/dhcpd /vagrant/radius /home/vagrant
     chown -R vagrant:vagrant /home/vagrant/dhcpd /home/vagrant/radius
@@ -46,15 +41,20 @@ if [ "$node" = "backoffice" ]; then
 fi
 
 if [ "$node" = "olt" ]; then
+#    pip install docker-compose
+#    docker-compose --file /vagrant/olt-stack.yml --project-name sub up -d
+#    until test "$(cat /sys/class/net/onu_rg/bridge/group_fwd_mask 2>/dev/null)" = "0x8"; do
+#        echo 8 | sudo tee /sys/class/net/onu_rg/bridge/group_fwd_mask >/dev/null 2>&1
+#        echo "Updating group forwarding mask ..."
+#        sleep 2
+#    done
+
     docker network create \
         --subnet 192.168.55.0/24 \
         --driver bridge \
         --attachable \
         --internal \
         -o com.docker.network.bridge.name=olt_onu olt_onu
-    sudo ip link add dev onu-veth type veth peer name rg-veth
-    sudo ip link set onu-veth up
-    sudo ip link set rg-veth up
     docker network create \
         --subnet 192.168.56.0/24 \
         --driver bridge \
