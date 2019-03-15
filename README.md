@@ -28,7 +28,7 @@ vagrant ssh network
 cd /vagrant
 make start-network
 ```
-After creating the network devices the script will leave you in the `mininet` CLI and as such the terminal in you you execute `make start-network` is now dedicated.
+After creating the network devices the script will leave you in the `mininet` CLI and as such the terminal in you you execute `make start-network` is now dedicated. **NOTE:** *It is reccomended that you start `mininet` in a `screen` session, so that the `mininet` process can continue to run if you have to disconnect from the host.*
 
 ### Add VM Interfaces to Network
 ```bash
@@ -443,6 +443,7 @@ Each VM is NAT-ed to the Vagrant host as well as has a management IP. The hosts 
 |`compute2`|`192.168.33.13`|`10.1.3.3`|
 |`compute3`|`192.168.33.14`|`10.1.4.3`|
 |`olt`|`192.168.33.15`|`10.1.4.4`|
+|`backoffice`|`192.168.33.16`|`10.1.5.3`|
 
 ## Connecting VMs to Trellis (`mininet`)
 In order to **wire in** the VMs into the `mininet` based fabric a GRE tunnel is created from the `network` VM to each of the other MV (`management` and `compute{1,2,3}`). The GRE tunnel is created in the `192.168.33.0/24` network space.

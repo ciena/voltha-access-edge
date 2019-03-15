@@ -34,10 +34,10 @@ if [[ "$node" =~ ^compute[123]$ ]]; then
 fi
 
 if [ "$node" = "backoffice" ]; then
+    pip install docker-compose
     cp -r /vagrant/dhcpd /vagrant/radius /home/vagrant
     chown -R vagrant:vagrant /home/vagrant/dhcpd /home/vagrant/radius
-    docker swarm init --advertise-addr 10.1.5.3
-    docker stack deploy --compose-file /vagrant/backoffice-stack.yml backoffice
+    docker-compose --file /vagrant/backoffice-compose.yml --project-name backoffice up -d
 fi
 
 if [ "$node" = "olt" ]; then

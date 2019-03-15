@@ -1,0 +1,26 @@
+version: '3'
+services:
+  radius:
+    image: tpdock/freeradius:latest
+    restart: on-failure
+    environment:
+      - RADIUS_LISTEN_IP=*
+      - USERS_FILE=/etc/raddb/users
+      - RADIUS_CLIENTS=SECRET@0.0.0.0/0
+    ports:
+      - 1812:1812/udp
+      - 1813:1813/udp
+    volumes:
+      - /home/vagrant/radius/clients.conf:/etc/raddb/clients.conf
+      - /home/vagrant/radius/users:/etc/raddb/users
+
+  dhcpd:
+    image: sirferdek/isc-dhcp-server:latest
+    restart: on-failure
+    ports:
+      - 67:67/udp
+    volumes:
+      - /home/vagrant/dhcpd/var/:/var/lib/dhcp/:rw
+      - /home/vagrant/dhcpd/dhcpd.conf:/etc/dhcp/dhcpd.conf:ro
+    command:
+      - -d
