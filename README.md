@@ -1,10 +1,40 @@
-# Setting up Kubernetes Cluster with ONOS Trellis
+# Setting up VOLTHA with Kubernetes Cluster and ONOS Trellis
 
-The included `Vagrantfile` creates 5 VMs for this demonstration environment
+## Overview
+
+![](overview.png)
+
+This repository contains instructions on deploying a simulated VOLTHA access edge environment that can be utilized for development and various test use cases. This environment strives to be as similar to an physical deployment as possible using virtualization tools such as `Mininet`, `Vagrant`, and `Docker`.
+
+The environment consists of a **ONF Trellis** networking fabric with two (2) spines and four (4) leaves. Additionally there is an *aggregation* leaf which represents the backoffice of a deployment where infrastructure services are executed.
+
+Each leaf has a single `mininet` host attached as well as has at least one (1) VM attached. The VMs are created using `Vagrant` and attached to the leaves via `gre` tunnels.
+
+A Kubernetes cluster is formed over four (4) of the VMs (`management`, `compute1`, `compute2`, and `compute3`) where `management` is a Kubernetes manager and `compute{1,2,3}` are Kubernetes workers.
+
+A DHCP and RADIUS server are invoked on the `backoffice` VM and a simulate OLT, ONU, and RG are invoked on the `olt` VM.
+
+## Requirements
+As stated above and below, this environment creates 7 VMs using `Vagrant`. The resources allocated to each VM are in the table below. Suffice to say, that this environment might require more than a simple laptop.
+
+|VM|CPUs|Memory (G)|Disk (G)|
+|---|---|---|---|
+|network|2|6|10|
+|management|2|6|10|
+|compute{1,2,3}|2|6|10|
+|olt|2|2|10|
+|backoffice|2|2|10|
+
+It is possible that the environment may execute with fewer resources allocated, it has just not been tested.
+
+## Virtual Machines
+
+The included `Vagrantfile` creates 7 VMs for this demonstration environment
 - `network` - this VM hosts the `mininet` based Trellis leaf/spine network, including the switches and an instance of ONOS to control the network
 - `management` - this VM hosts an instance of `rancher` which is used to create and manage the Kubernetes cluster
 - `compute{1,2,3}` - these VMs are used as nodes for the Kubernetes cluster
 - `olt` - this VM simulates an OLT, ONU, and a [eventually] RG
+- `backoffice` - thie VM simulates the infrastructure services of a deployment
 
 # Walkthrough
 
