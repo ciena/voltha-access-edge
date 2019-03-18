@@ -34,7 +34,8 @@ help:
 	@echo "various targets to deploy a simulated VOLTHA environment."
 
 start-network:
-	sudo ./lsnet.py --controller=remote,ip=127.0.0.1,port=6653 --leaves=5 --spines=2 --hosts=1 --wait --ping --onos=http://karaf:karaf@localhost:8181
+	screen -dm -S mininet_session
+	screen -S mininet_session -X stuff  'sudo ./lsnet.py --controller=remote,ip=127.0.0.1,port=6653 --leaves=5 --spines=2 --hosts=1 --wait --ping --onos=http://karaf:karaf@localhost:8181\n'
 
 inject-vms:
 	sudo /vagrant/add-ports.sh
@@ -46,10 +47,12 @@ test-fabric:
 	@./test_fabric.sh
 
 ui-tunnels:
-	vagrant ssh network -- -L 0.0.0.0:8181:127.0.0.1:8181 -f -n -N -q -T
+	screen -dm -S ui_tunnels
+	screen -S ui_tunnels -X stuff 'vagrant ssh network -- -L 0.0.0.0:8181:127.0.0.1:8181 -f -n -N -q -T\n'
 
 olt-onos-ui-tunnel:
-	vagrant ssh management -- -L 0.0.0.0:9191:onos-ui:8181 -f -n -N -q -T
+	screen -dm -S onos_ui_tunnel
+	screen -S onos_ui_tunnel -X stuff 'vagrant ssh management -- -L 0.0.0.0:9191:onos-ui:8181 -f -n -N -q -T\n'
 
 deploy-k8s:
 	/vagrant/deploy-k8s.sh
@@ -60,10 +63,10 @@ management-post-install:
 post-install: $(shell hostname)-post-install
 
 helm-etcd-operator:
-	helm install -n etcd-operator stable/etcd-operator --version 0.8.0
+	/snap/bin/helm install -n etcd-operator stable/etcd-operator --version 0.8.0
 
 helm-kafka:
-	 helm install --version 0.8.8 \
+	/snap/bin/helm install --version 0.8.8 \
 		--set configurationOverrides."offsets\.topic\.replication\.factor"=1 \
 		--set configurationOverrides."log\.retention\.hours"=4 \
 		--set configurationOverrides."log\.message\.timestamp\.type"="LogAppendTime" \
@@ -100,7 +103,7 @@ $(HOME)/onos-apps/dhcpl2relay-1.5.0.oar:
 download-onos-apps: $(HOME)/onos-apps $(HOME)/onos-apps/cord-config-$(CONFIG_VER).oar $(HOME)/onos-apps/sadis-app-$(SADIS_VER).oar $(HOME)/onos-apps/aaa-$(AAA_VER).oar $(HOME)/onos-apps/olt-app-$(OLT_VER).oar $(HOME)/onos-apps/dhcpl2relay-$(DHCP_VER).oar
 
 helm-onos: download-onos-apps
-	helm install -n onos cord/onos
+	/snap/bin/helm install -n onos cord/onos
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/cord-config-$(CONFIG_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'CONFIG' ONOS application ..."; sleep 1; done
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/sadis-app-$(SADIS_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'SADIS' ONOS application ..."; sleep 1; done
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/olt-app-$(OLT_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'OLT' ONOS application ..."; sleep 1; done
@@ -111,7 +114,7 @@ helm-onos: download-onos-apps
 helm-voltha: # helm-kafka helm-etcd-operator helm-onos
 	@echo "Waiting for etcd-operator to initialize ..." 
 	@until test $$(kubectl get crd 2>/dev/null | grep -c etcd) -eq 3; do echo "waiting ..."; sleep 2; done
-	helm install -n voltha cord/voltha
+	/snap/bin/helm install -n voltha cord/voltha
 
 test-authenticate:
 	docker exec -ti rg /vagrant/test/rg-authenticate.sh
