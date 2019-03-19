@@ -48,17 +48,13 @@
             "hardwareIdentifier": "aa:bb:cc:dd:ee:ff",
             "ipAddress": "10.233.111.16",
             "nasId": "10.1.4.4:50060"
-          },
-          {
-            "id": "10.1.4.4:50060",
-            "uplinkPort": 2
           }
         ]
       }
     },
-    "org.onosproject.dhcp-relay": {
+    "org.opencord.dhcpl2relay": {
       "dhcpl2relay" : {
-        "dhcpServerConnectPoints" : [ "of:00000000000000b2/2" ],
+        "dhcpServerConnectPoints" : [ "of:0000000000000001/1" ],
         "useOltUplinkForServerPktInOut" : true
       }
     }

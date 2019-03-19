@@ -49,9 +49,18 @@ fi
 
 if [ "$node" = "backoffice" ]; then
     pip install docker-compose
+    sudo apt-get install -y openvswitch-switch
     cp -r /vagrant/dhcpd /vagrant/radius /home/vagrant
     chown -R vagrant:vagrant /home/vagrant/dhcpd /home/vagrant/radius
     docker-compose --file /vagrant/backoffice-compose.yml --project-name backoffice up -d
+    sudo ovs-vsctl add-br dhcp0
+    sudo ovs-vsctl set bridge dhcp0 other-config:datapath-id=0000000000000001
+    sudo ovs-vsctl set-controller dhcp0 tcp:10.1.3.3:31653
+    sudo ip link add dhcp-veth type veth peer name int-dhcp-veth
+    sudo ip link set dhcp-veth up
+    sudo ip link set int-dhcp-veth up
+    sudo ovs-vsctl add-port dhcp0 dhcp-veth 
+    sudo /vagrant/pipework int-dhcp-veth -i eth5 backoffice_dhcpd_1 192.168.44.2/32
 fi
 
 if [ "$node" = "olt" ]; then
@@ -69,21 +78,22 @@ if [ "$node" = "olt" ]; then
         --attachable \
         --internal \
         -o com.docker.network.bridge.name=olt_onu olt_onu
-    docker network create \
-        --subnet 192.168.56.0/24 \
-        --driver bridge \
-        --attachable \
-        --internal \
-        -o com.docker.network.bridge.name=onu_rg  onu_rg
-    docker create -p 50060:50060 --rm --name=olt voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type OLT -onus 4 -external_if eth0 -internal_if eth1 -vcore_endpoint vcore  -verbose -promiscuous
+    sudo ip link add onu_rg type veth peer name rg_onu
+    sudo ip link set onu_rg up
+    sudo ip link set rg_onu up
+    docker create -p 50060:50060 --rm --name=olt voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type OLT \
+        -onus 4 -external_if eth0 -internal_if eth1 -vcore_endpoint vcore  -verbose -promiscuous
     docker network connect --ip 192.168.55.2 olt_onu olt
-    docker create --rm --name=onu  voltha/voltha-ponsim:1.6.0 ash -c 'while true; do /app/ponsim -device_type ONU -onus 1 -parent_addr 192.168.55.2 -grpc_port 50061 -external_if eth2 -internal_if eth1  -verbose -parent_port 50060 -promiscuous -grpc_addr 192.168.55.3; sleep 2; done'
+    docker create --rm --name=onu  voltha/voltha-ponsim:1.6.0 ash -c 'while true; do /app/ponsim -device_type ONU \
+        -onus 1 -parent_addr 192.168.55.2 -grpc_port 50061 -external_if eth2 -internal_if eth1  -verbose \
+        -parent_port 50060 -promiscuous -grpc_addr 192.168.55.3; sleep 5; done'
     docker network connect --ip 192.168.55.3 olt_onu onu
-    docker network connect --ip 192.168.56.2 onu_rg onu
     docker create --rm -v /vagrant:/vagrant --name rg voltha/voltha-tester:1.6.0 /bin/bash -c 'trap : TERM INT; sleep infinity & wait'
-    docker network connect --ip 192.168.56.3 onu_rg rg
     docker start olt
     docker start onu
     docker start rg
-    echo 8 | sudo tee /sys/class/net/onu_rg/bridge/group_fwd_mask >/dev/null
+    until [ $(docker inspect rg onu -f '{{.State.Status}}' 2>/dev/null | grep -c running) -eq 2 ]; do \
+        echo "Waiting for containers to start ..."; sleep 3; done
+    sudo /vagrant/pipework onu_rg -i eth2 onu 0.0.0.0/32
+    sudo /vagrant/pipework rg_onu -i eth1 rg 0.0.0.0/32
 fi

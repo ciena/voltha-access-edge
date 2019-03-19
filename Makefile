@@ -108,6 +108,9 @@ helm-onos: download-onos-apps
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/dhcpl2relay-$(DHCP_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'DHCP L2 Relay' ONOS application ..."; sleep 1; done
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/json http://onos-ui:8181/onos/v1/network/configuration --data @/vagrant/olt-onos-netcfg.json 2>/dev/null | tail -1) -eq 200; do echo "Configuring VOLTHA ONOS ..."; sleep 1; done
 
+post-onos-olt-config:
+	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/json http://onos-ui:8181/onos/v1/network/configuration --data @/vagrant/olt-onos-netcfg.json 2>/dev/null | tail -1) -eq 200; do echo "Configuring VOLTHA ONOS ..."; sleep 1; done
+
 helm-voltha: # helm-kafka helm-etcd-operator helm-onos
 	@echo "Waiting for etcd-operator to initialize ..." 
 	@until test $$(kubectl get crd 2>/dev/null | grep -c etcd) -eq 3; do echo "waiting ..."; sleep 2; done

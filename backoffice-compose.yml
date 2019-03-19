@@ -31,10 +31,10 @@ services:
   dhcpd:
     image: sirferdek/isc-dhcp-server:latest
     restart: on-failure
+    privileged: true
     ports:
       - 67:67/udp
     volumes:
       - /home/vagrant/dhcpd/var/:/var/lib/dhcp/:rw
       - /home/vagrant/dhcpd/dhcpd.conf:/etc/dhcp/dhcpd.conf:ro
-    command:
-      - -d
+    entrypoint: bash -c 'while true; do /usr/sbin/dhcpd --no-pid -d -f eth5; sleep 5; done'
