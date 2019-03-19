@@ -88,12 +88,13 @@ if [ "$node" = "olt" ]; then
         -onus 1 -parent_addr 192.168.55.2 -grpc_port 50061 -external_if eth2 -internal_if eth1  -verbose \
         -parent_port 50060 -promiscuous -grpc_addr 192.168.55.3; sleep 5; done'
     docker network connect --ip 192.168.55.3 olt_onu onu
-    docker create --rm --privileged -v /vagrant:/vagrant --name rg voltha/voltha-tester:1.6.0 /bin/bash -c 'trap : TERM INT; sleep infinity & wait'
+    docker create --rm --privileged --net=none -v /vagrant:/vagrant --name rg voltha/voltha-tester:1.6.0 /bin/bash -c 'trap : TERM INT; sleep infinity & wait'
     docker start olt
     docker start onu
     docker start rg
     until [ $(docker inspect rg onu -f '{{.State.Status}}' 2>/dev/null | grep -c running) -eq 2 ]; do \
         echo "Waiting for containers to start ..."; sleep 3; done
+    docker exec -ti rg umount /etc/resolv.conf
     sudo /vagrant/pipework onu_rg -i eth2 onu 0.0.0.0/32
-    sudo /vagrant/pipework rg_onu -i eth1 rg 0.0.0.0/32
+    sudo /vagrant/pipework rg_onu -i eth0 rg 0.0.0.0/32
 fi

@@ -121,5 +121,5 @@ test-authenticate:
 	docker exec -ti rg /vagrant/test/rg-authenticate.sh
 
 test-dhcp:
-	docker exec -ti rg dhclient -4 -v -i eth1
-	docker exec -ti rg ip addr show eth1
+	docker exec -ti rg dhclient -4 -v -i eth0
+	docker exec -ti rg ip addr show eth0

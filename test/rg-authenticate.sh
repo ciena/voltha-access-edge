@@ -13,4 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-wpa_supplicant -ddd -Dwired -ieth1 -c/vagrant/test/wpa_supplicant.conf
+wpa_supplicant -ddd -Dwired -ieth0 -c/vagrant/test/wpa_supplicant.conf
