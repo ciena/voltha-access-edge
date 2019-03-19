@@ -313,7 +313,7 @@ docker exec -ti rg /vagrant/test/rg-authenticate.sh
 wpa_supplicant v2.4
 random: Trying to read entropy from /dev/random
 Successfully initialized wpa_supplicant
-Initializing interface 'eth1' conf '/vagrant/test/wpa_supplicant.conf' driver 'wired' ctrl_interface 'N/A' bridge 'N/A'
+Initializing interface 'eth0' conf '/vagrant/test/wpa_supplicant.conf' driver 'wired' ctrl_interface 'N/A' bridge 'N/A'
 Configuration file '/vagrant/test/wpa_supplicant.conf' -> '/vagrant/test/wpa_supplicant.conf'
 Reading configuration file '/vagrant/test/wpa_supplicant.conf'
 ctrl_interface='/var/run/wpa_supplicant'
@@ -328,14 +328,14 @@ eapol_flags=0 (0x0)
 Priority group 0
    id=0 ssid=''
 wpa_driver_wired_init: Added multicast membership with packet socket
-Add interface eth1 to a new radio N/A
-eth1: Own MAC address: 02:42:c0:a8:38:03
-eth1: RSN: flushing PMKID list in the driver
-eth1: Setting scan request: 0.100000 sec
+Add interface eth0 to a new radio N/A
+eth0: Own MAC address: 02:42:c0:a8:38:03
+eth0: RSN: flushing PMKID list in the driver
+eth0: Setting scan request: 0.100000 sec
 TDLS: TDLS operation not supported by driver
 TDLS: Driver uses internal link setup
 TDLS: Driver does not support TDLS channel switching
-eth1: WPS: UUID based on MAC address: 7b57a627-5637-5eaf-bf98-28534b18f3c7
+eth0: WPS: UUID based on MAC address: 7b57a627-5637-5eaf-bf98-28534b18f3c7
 ENGINE: Loading dynamic engine
 ENGINE: Loading dynamic engine
 EAPOL: SUPP_PAE entering state DISCONNECTED
@@ -343,35 +343,35 @@ EAPOL: Supplicant port status: Unauthorized
 EAPOL: KEY_RX entering state NO_KEY_RECEIVE
 EAPOL: SUPP_BE entering state INITIALIZE
 EAP: EAP entering state DISABLED
-eth1: Added interface eth1
-eth1: State: DISCONNECTED -> DISCONNECTED
+eth0: Added interface eth0
+eth0: State: DISCONNECTED -> DISCONNECTED
 random: Got 20/20 bytes from /dev/random
 EAPOL: External notification - EAP success=0
 EAPOL: External notification - EAP fail=0
 EAPOL: External notification - portControl=Auto
-eth1: Already associated with a configured network - generating associated event
-eth1: Event ASSOC (0) received
-eth1: Association info event
+eth0: Already associated with a configured network - generating associated event
+eth0: Event ASSOC (0) received
+eth0: Association info event
 FT: Stored MDIE and FTIE from (Re)Association Response - hexdump(len=0):
-eth1: State: DISCONNECTED -> ASSOCIATED
-eth1: Associated to a new BSS: BSSID=01:80:c2:00:00:03
+eth0: State: DISCONNECTED -> ASSOCIATED
+eth0: Associated to a new BSS: BSSID=01:80:c2:00:00:03
 Add randomness: count=1 entropy=0
 random pool - hexdump(len=128): [REMOVED]
 random_mix_pool - hexdump(len=16): [REMOVED]
 random_mix_pool - hexdump(len=6): [REMOVED]
 random pool - hexdump(len=128): [REMOVED]
-eth1: Select network based on association information
-eth1: Network configuration found for the current AP
-eth1: WPA: clearing AP WPA IE
-eth1: WPA: clearing AP RSN IE
-eth1: WPA: clearing own WPA/RSN IE
-eth1: Failed to get scan results
+eth0: Select network based on association information
+eth0: Network configuration found for the current AP
+eth0: WPA: clearing AP WPA IE
+eth0: WPA: clearing AP RSN IE
+eth0: WPA: clearing own WPA/RSN IE
+eth0: Failed to get scan results
 EAPOL: External notification - EAP success=0
 EAPOL: External notification - EAP fail=0
 EAPOL: External notification - portControl=Auto
-eth1: Associated with 01:80:c2:00:00:03
-eth1: WPA: Association event - clear replay counter
-eth1: WPA: Clear old PTK
+eth0: Associated with 01:80:c2:00:00:03
+eth0: WPA: Association event - clear replay counter
+eth0: WPA: Clear old PTK
 TDLS: Remove peers on association
 EAPOL: External notification - portEnabled=0
 EAPOL: External notification - portValid=0
@@ -380,7 +380,7 @@ EAPOL: SUPP_PAE entering state CONNECTING
 EAPOL: SUPP_BE entering state IDLE
 EAP: EAP entering state INITIALIZE
 EAP: EAP entering state IDLE
-eth1: Cancelling scan request
+eth0: Cancelling scan request
 WMM AC: Missing IEs
 EAPOL: startWhen --> 0
 EAPOL: SUPP_PAE entering state CONNECTING
@@ -388,7 +388,7 @@ EAPOL: txStart
 TX EAPOL: dst=01:80:c2:00:00:03
 TX EAPOL - hexdump(len=4): 01 01 00 00
 l2_packet_receive: src=00:00:00:00:10:01 len=46
-eth1: RX EAPOL from 00:00:00:00:10:01
+eth0: RX EAPOL from 00:00:00:00:10:01
 RX EAPOL - hexdump(len=46): 01 00 00 05 01 39 00 05 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 EAPOL: Received EAP-Packet frame
 EAPOL: SUPP_PAE entering state RESTART
@@ -400,7 +400,7 @@ EAPOL: getSuppRsp
 EAP: EAP entering state RECEIVED
 EAP: Received EAP-Request id=57 method=1 vendor=0 vendorMethod=0
 EAP: EAP entering state IDENTITY
-eth1: CTRL-EVENT-EAP-STARTED EAP authentication started
+eth0: CTRL-EVENT-EAP-STARTED EAP authentication started
 EAP: Status notification: started (param=)
 EAP: EAP-Request Identity data - hexdump_ascii(len=0):
 EAP: using real identity - hexdump_ascii(len=4):
@@ -413,7 +413,7 @@ TX EAPOL: dst=01:80:c2:00:00:03
 TX EAPOL - hexdump(len=13): 01 00 00 09 02 39 00 09 01 75 73 65 72
 EAPOL: SUPP_BE entering state RECEIVE
 l2_packet_receive: src=00:00:00:00:10:01 len=46
-eth1: RX EAPOL from 00:00:00:00:10:01
+eth0: RX EAPOL from 00:00:00:00:10:01
 RX EAPOL - hexdump(len=46): 01 00 00 16 01 3a 00 16 04 10 33 5d af 27 c9 3e 25 cf 62 3d e2 2f 1a 26 16 df 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 EAPOL: Received EAP-Packet frame
 EAPOL: SUPP_BE entering state REQUEST
@@ -421,10 +421,10 @@ EAPOL: getSuppRsp
 EAP: EAP entering state RECEIVED
 EAP: Received EAP-Request id=58 method=4 vendor=0 vendorMethod=0
 EAP: EAP entering state GET_METHOD
-eth1: CTRL-EVENT-EAP-PROPOSED-METHOD vendor=0 method=4
+eth0: CTRL-EVENT-EAP-PROPOSED-METHOD vendor=0 method=4
 EAP: Status notification: accept proposed method (param=MD5)
 EAP: Initialize selected EAP method: vendor 0 method 4 (MD5)
-eth1: CTRL-EVENT-EAP-METHOD EAP vendor 0 method 4 (MD5) selected
+eth0: CTRL-EVENT-EAP-METHOD EAP vendor 0 method 4 (MD5) selected
 EAP: EAP entering state METHOD
 EAP-MD5: Challenge - hexdump(len=16): 33 5d af 27 c9 3e 25 cf 62 3d e2 2f 1a 26 16 df
 EAP-MD5: Generating Challenge Response
@@ -438,7 +438,7 @@ TX EAPOL: dst=01:80:c2:00:00:03
 TX EAPOL - hexdump(len=26): 01 00 00 16 02 3a 00 16 04 10 53 ac db d9 d5 d7 f8 80 9a 4b 85 b3 a1 24 1e 81
 EAPOL: SUPP_BE entering state RECEIVE
 l2_packet_receive: src=00:00:00:00:10:01 len=46
-eth1: RX EAPOL from 00:00:00:00:10:01
+eth0: RX EAPOL from 00:00:00:00:10:01
 RX EAPOL - hexdump(len=46): 01 00 00 04 03 3a 00 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 EAPOL: Received EAP-Packet frame
 EAPOL: SUPP_BE entering state REQUEST
@@ -447,12 +447,12 @@ EAP: EAP entering state RECEIVED
 EAP: Received EAP-Success
 EAP: Status notification: completion (param=success)
 EAP: EAP entering state SUCCESS
-eth1: CTRL-EVENT-EAP-SUCCESS EAP authentication completed successfully
+eth0: CTRL-EVENT-EAP-SUCCESS EAP authentication completed successfully
 EAPOL: IEEE 802.1X for plaintext connection; no EAPOL-Key frames required
-eth1: WPA: EAPOL processing complete
-eth1: Cancelling authentication timeout
-eth1: State: ASSOCIATED -> COMPLETED
-eth1: CTRL-EVENT-CONNECTED - Connection to 01:80:c2:00:00:03 completed [id=0 id_str=]
+eth0: WPA: EAPOL processing complete
+eth0: Cancelling authentication timeout
+eth0: State: ASSOCIATED -> COMPLETED
+eth0: CTRL-EVENT-CONNECTED - Connection to 01:80:c2:00:00:03 completed [id=0 id_str=]
 EAPOL: SUPP_PAE entering state AUTHENTICATED
 EAPOL: Supplicant port status: Authorized
 EAPOL: SUPP_BE entering state RECEIVE
@@ -460,6 +460,39 @@ EAPOL: SUPP_BE entering state SUCCESS
 EAPOL: SUPP_BE entering state IDLE
 EAPOL authentication completed - result=SUCCESS
 ```
+
+## DHCP Address Allocation Subscriber Test
+To test the DHCP capability, the following `test-dhcp` make target can be used.
+```
+vagrant ssh olt
+cd /vagrant
+make test-dhcp
+```
+
+**Output:**
+```
+docker exec -ti rg dhclient -4 -v -i eth0
+Internet Systems Consortium DHCP Client 4.3.3
+Copyright 2004-2015 Internet Systems Consortium.
+All rights reserved.
+For info, please visit https://www.isc.org/software/dhcp/
+
+Listening on LPF/eth0/52:d2:16:16:64:46
+Sending on   LPF/eth0/52:d2:16:16:64:46
+Sending on   Socket/fallback
+Created duid \000\001\000\001$$=XR\322\026\026dF.
+DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xebfd054c)
+DHCPREQUEST of 192.168.44.13 on eth0 to 255.255.255.255 port 67 (xid=0x4c05fdeb)
+DHCPOFFER of 192.168.44.13 from 192.168.44.2
+DHCPACK of 192.168.44.13 from 192.168.44.2
+bound to 192.168.44.13 -- renewal in 236 seconds.
+docker exec -ti rg ip addr show eth0
+25: eth0@if9: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1
+    link/ether 52:d2:16:16:64:46 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 192.168.44.13/24 brd 192.168.44.255 scope global eth0
+       valid_lft forever preferred_lft forever
+```
+
 
 # Details
 ## IP Addressing
