@@ -5,7 +5,7 @@
         "driver": "voltha"
       },
       "accessDevice": {
-        "uplink": "0",
+        "uplink": "2",
         "vlan": "128"
       }
     }
@@ -20,8 +20,8 @@
         "bindings": [
           {
             "mac": "aa:bb:cc:dd:ee:ff",
-            "s-tag": 2,
-            "c-tag": 128,
+            "s-tag": -1,
+            "c-tag": -1,
             "nas_port_id": "PSMO12345678"
           }
         ]
@@ -39,8 +39,8 @@
         "entries": [
           {
             "id": "PSMO12345678",
-            "cTag": 128,
-            "sTag": 2,
+            "cTag": -1,
+            "sTag": -1,
             "nasPortId": "PSMO12345678"
           },
           {
@@ -55,7 +55,7 @@
     "org.opencord.dhcpl2relay": {
       "dhcpl2relay" : {
         "dhcpServerConnectPoints" : [ "of:0000000000000001/1" ],
-        "useOltUplinkForServerPktInOut" : true
+        "useOltUplinkForServerPktInOut" : false
       }
     }
   }

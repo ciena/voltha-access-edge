@@ -88,7 +88,7 @@ if [ "$node" = "olt" ]; then
         -onus 1 -parent_addr 192.168.55.2 -grpc_port 50061 -external_if eth2 -internal_if eth1  -verbose \
         -parent_port 50060 -promiscuous -grpc_addr 192.168.55.3; sleep 5; done'
     docker network connect --ip 192.168.55.3 olt_onu onu
-    docker create --rm -v /vagrant:/vagrant --name rg voltha/voltha-tester:1.6.0 /bin/bash -c 'trap : TERM INT; sleep infinity & wait'
+    docker create --rm --privileged -v /vagrant:/vagrant --name rg voltha/voltha-tester:1.6.0 /bin/bash -c 'trap : TERM INT; sleep infinity & wait'
     docker start olt
     docker start onu
     docker start rg

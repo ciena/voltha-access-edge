@@ -100,13 +100,14 @@ $(HOME)/onos-apps/dhcpl2relay-1.5.0.oar:
 download-onos-apps: $(HOME)/onos-apps $(HOME)/onos-apps/cord-config-$(CONFIG_VER).oar $(HOME)/onos-apps/sadis-app-$(SADIS_VER).oar $(HOME)/onos-apps/aaa-$(AAA_VER).oar $(HOME)/onos-apps/olt-app-$(OLT_VER).oar $(HOME)/onos-apps/dhcpl2relay-$(DHCP_VER).oar
 
 helm-onos: download-onos-apps
-	helm install -n onos cord/onos
+	helm install -n onos --values value-overrides.yml cord/onos
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/cord-config-$(CONFIG_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'CONFIG' ONOS application ..."; sleep 1; done
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/sadis-app-$(SADIS_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'SADIS' ONOS application ..."; sleep 1; done
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/olt-app-$(OLT_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'OLT' ONOS application ..."; sleep 1; done
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/aaa-$(AAA_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'AAA' ONOS application ..."; sleep 1; done
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/dhcpl2relay-$(DHCP_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'DHCP L2 Relay' ONOS application ..."; sleep 1; done
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/json http://onos-ui:8181/onos/v1/network/configuration --data @/vagrant/olt-onos-netcfg.json 2>/dev/null | tail -1) -eq 200; do echo "Configuring VOLTHA ONOS ..."; sleep 1; done
+	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/json http://onos-ui:8181/onos/v1/configuration/org.opencord.olt.impl.Olt --data @/vagrant/olt-onos-enableDhcp.json 2>/dev/null | tail -1) -eq 200; do echo "Enabling VOLTHA ONOS DHCP provisioning..."; sleep 1; done
 
 post-onos-olt-config:
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/json http://onos-ui:8181/onos/v1/network/configuration --data @/vagrant/olt-onos-netcfg.json 2>/dev/null | tail -1) -eq 200; do echo "Configuring VOLTHA ONOS ..."; sleep 1; done
@@ -114,8 +115,11 @@ post-onos-olt-config:
 helm-voltha: # helm-kafka helm-etcd-operator helm-onos
 	@echo "Waiting for etcd-operator to initialize ..." 
 	@until test $$(kubectl get crd 2>/dev/null | grep -c etcd) -eq 3; do echo "waiting ..."; sleep 2; done
-	helm install -n voltha cord/voltha
+	helm install -n voltha --values value-overrides.yml cord/voltha
 
 test-authenticate:
 	docker exec -ti rg /vagrant/test/rg-authenticate.sh
 
+test-dhcp:
+	docker exec -ti rg dhclient -4 -v -i eth1
+	docker exec -ti rg ip addr show eth1

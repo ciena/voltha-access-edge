@@ -1,0 +1,4 @@
+{
+ "enableDhcpIgmpOnProvisioning" : true,
+ "defaultVlan" : 0
+}
