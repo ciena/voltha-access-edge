@@ -462,6 +462,7 @@ EAPOL authentication completed - result=SUCCESS
 ```
 
 ## DHCP Address Allocation Subscriber Test
+**NOTE: This currently is not functioning and is under investigation**
 To test the DHCP capability, the following `test-dhcp` make target can be used.
 ```
 vagrant ssh olt

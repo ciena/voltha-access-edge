@@ -47,8 +47,6 @@ test-fabric:
 
 ui-tunnels:
 	vagrant ssh network -- -L 0.0.0.0:8181:127.0.0.1:8181 -f -n -N -q -T
-
-olt-onos-ui-tunnel:
 	vagrant ssh management -- -L 0.0.0.0:9191:onos-ui:8181 -f -n -N -q -T
 
 deploy-k8s:
@@ -77,9 +75,9 @@ $(HOME)/onos-apps:
 	mkdir -p $(HOME)/onos-apps
 
 CONFIG_VER=1.4.0
-SADIS_VER=2.1.0
-OLT_VER=1.4.1
-AAA_VER=1.6.0
+SADIS_VER=2.2.0
+OLT_VER=2.1.0
+AAA_VER=1.8.0
 DHCP_VER=1.5.0
 
 $(HOME)/onos-apps/cord-config-$(CONFIG_VER).oar:
@@ -107,10 +105,17 @@ helm-onos: download-onos-apps
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/aaa-$(AAA_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'AAA' ONOS application ..."; sleep 1; done
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/octet-stream http://onos-ui:8181/onos/v1/applications?activate=true --data-binary @$(HOME)/onos-apps/dhcpl2relay-$(DHCP_VER).oar 2>/dev/null | tail -1) -eq 409; do echo "Installing 'DHCP L2 Relay' ONOS application ..."; sleep 1; done
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/json http://onos-ui:8181/onos/v1/network/configuration --data @/vagrant/olt-onos-netcfg.json 2>/dev/null | tail -1) -eq 200; do echo "Configuring VOLTHA ONOS ..."; sleep 1; done
-	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/json http://onos-ui:8181/onos/v1/configuration/org.opencord.olt.impl.Olt --data @/vagrant/olt-onos-enableDhcp.json 2>/dev/null | tail -1) -eq 200; do echo "Enabling VOLTHA ONOS DHCP provisioning..."; sleep 1; done
+	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/json http://onos-ui:8181/onos/v1/configuration/org.opencord.olt.impl.Olt --data @/vagrant/olt-onos-olt-settings.json 2>/dev/null | tail -1) -eq 200; do echo "Enabling VOLTHA ONOS DHCP provisioning..."; sleep 1; done
+	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/json http://onos-ui:8181/onos/v1/configuration/org.onosproject.net.flow.impl.FlowRuleManager --data @/vagrant/olt-onos-enableExtraneousRules.json 2>/dev/null | tail -1) -eq 200; do echo "Enabling extraneous rules for ONOS..."; sleep 1; done
 
 post-onos-olt-config:
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/json http://onos-ui:8181/onos/v1/network/configuration --data @/vagrant/olt-onos-netcfg.json 2>/dev/null | tail -1) -eq 200; do echo "Configuring VOLTHA ONOS ..."; sleep 1; done
+
+provision-vlans-for-backoffice:
+	sudo ovs-ofctl -O OpenFlow13 add-flow dhcp0 in_port=1,dl_vlan=222,actions=CONTROLLER:65535
+
+grant-subscriber-access:
+	@echo "via ONOS CLI volt-add ..."
 
 helm-voltha: # helm-kafka helm-etcd-operator helm-onos
 	@echo "Waiting for etcd-operator to initialize ..." 

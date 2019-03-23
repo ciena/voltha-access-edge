@@ -37,4 +37,4 @@ services:
     volumes:
       - /home/vagrant/dhcpd/var/:/var/lib/dhcp/:rw
       - /home/vagrant/dhcpd/dhcpd.conf:/etc/dhcp/dhcpd.conf:ro
-    entrypoint: bash -c 'while true; do /usr/sbin/dhcpd --no-pid -d -f eth5; sleep 5; done'
+    entrypoint: bash -c 'while true; do /usr/sbin/dhcpd --no-pid -d -f eth5.222.111; sleep 5; done'

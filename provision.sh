@@ -60,7 +60,25 @@ if [ "$node" = "backoffice" ]; then
     sudo ip link set dhcp-veth up
     sudo ip link set int-dhcp-veth up
     sudo ovs-vsctl add-port dhcp0 dhcp-veth 
-    sudo /vagrant/pipework int-dhcp-veth -i eth5 backoffice_dhcpd_1 192.168.44.2/32
+    sudo /vagrant/pipework int-dhcp-veth -i eth5 backoffice_dhcpd_1 0.0.0.0/32
+    sudo ovs-ofctl -O OpenFlow13 add-flow dhcp0 in_port=1,dl_vlan=222,actions=CONTROLLER:65535
+
+    # Need to wait for docker container to be running
+    until test "$(docker inspect backoffice_dhcpd_1 -f '{{.State.Status}}')" = "running"; do \
+        echo "Waiting for containers to start ..."; sleep 3; done
+    docker exec backoffice_dhcpd_1 apt-get update -y
+    docker exec backoffice_dhcpd_1 apt-get install -y net-tools iproute2
+    docker exec backoffice_dhcpd_1 ip link add link eth5 name eth5.222 type vlan id 222
+    docker exec backoffice_dhcpd_1 ip link add link eth5.222 name eth5.222.111 type vlan id 111
+    docker exec backoffice_dhcpd_1 ip link set eth5.222 up
+    docker exec backoffice_dhcpd_1 ip link set eth5.222.111 up
+    docker exec backoffice_dhcpd_1 ip addr add 192.168.44.2/24 dev eth5.222.111
+
+    #docker exec backoffice_dhcpd_1 ip link add link eth5 name eth5.2 type vlan id 2
+    #docker exec backoffice_dhcpd_1 ip link add link eth5.2 name eth5.2.128 type vlan id 128
+    #docker exec backoffice_dhcpd_1 ip link set eth5.2 up
+    #docker exec backoffice_dhcpd_1 ip link set eth5.2.128 up
+    #docker exec backoffice_dhcpd_1 ip addr add 192.168.44.2/24 dev eth5.2.128
 fi
 
 if [ "$node" = "olt" ]; then
@@ -84,11 +102,14 @@ if [ "$node" = "olt" ]; then
     docker create -p 50060:50060 --rm --name=olt voltha/voltha-ponsim:1.6.0 /app/ponsim -device_type OLT \
         -onus 4 -external_if eth0 -internal_if eth1 -vcore_endpoint vcore  -verbose -promiscuous
     docker network connect --ip 192.168.55.2 olt_onu olt
-    docker create --rm --name=onu  voltha/voltha-ponsim:1.6.0 ash -c 'while true; do /app/ponsim -device_type ONU \
-        -onus 1 -parent_addr 192.168.55.2 -grpc_port 50061 -external_if eth2 -internal_if eth1  -verbose \
-        -parent_port 50060 -promiscuous -grpc_addr 192.168.55.3; sleep 5; done'
+    docker create --rm --name=onu  voltha/voltha-ponsim:1.6.0 \
+        ash -c 'until test "$(ifconfig eth2 2>&1| grep -c RUNNING)" -eq 1; do echo "Waiting..."; sleep 5; done; \
+        /app/ponsim -device_type ONU \
+            -onus 1 -parent_addr 192.168.55.2 -grpc_port 50061 -external_if eth2 -internal_if eth1  -verbose \
+            -parent_port 50060 -promiscuous -grpc_addr 192.168.55.3'
     docker network connect --ip 192.168.55.3 olt_onu onu
-    docker create --rm --privileged --net=none -v /vagrant:/vagrant --name rg voltha/voltha-tester:1.6.0 /bin/bash -c 'trap : TERM INT; sleep infinity & wait'
+    docker create --rm --privileged --net=none -v /vagrant:/vagrant --name rg \
+        voltha/voltha-tester:1.6.0 /bin/bash -c 'trap : TERM INT; sleep infinity & wait'
     docker start olt
     docker start onu
     docker start rg
