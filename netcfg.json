@@ -1,281 +1,361 @@
 {
-    "devices": {
-        "of:0000000000000001": {
-            "segmentrouting": {
-                "name": "Spine1",
-                "ipv4NodeSid": 101,
-                "ipv4Loopback": "192.168.0.201",
-                "routerMac": "c0:ff:ee:00:00:01",
-                "isEdgeRouter": false,
-                "adjacencySids": []
-            },
-            "basic": {
-                "name": "Spine1",
-                "driver": "ofdpa-ovs",
-                "gridX" : 200.0,
-                "gridY" : 500.0,
-                "locType" : "grid"
-            }
-        },
-        "of:0000000000000002": {
-            "segmentrouting": {
-                "name": "Spine2",
-                "ipv4NodeSid": 102,
-                "ipv4Loopback": "192.168.0.202",
-                "routerMac": "c0:ff:ee:00:00:02",
-                "isEdgeRouter": false,
-                "adjacencySids": []
-            },
-            "basic": {
-                "name": "Spine2",
-                "driver": "ofdpa-ovs",
-                "gridX" : 600.0,
-                "gridY" : 500.0,
-                "locType" : "grid"
-            }
-        },
-        "of:0000000000000003": {
-            "segmentrouting": {
-                "name": "Leaf1",
-                "ipv4NodeSid": 103,
-                "ipv4Loopback": "192.168.0.203",
-                "routerMac": "c0:ff:ee:00:00:03",
-                "isEdgeRouter": true,
-                "adjacencySids": []
-            },
-            "basic": {
-                "name": "Leaf1",
-                "driver": "ofdpa-ovs",
-                "gridX" : -200.0,
-                "gridY" : 700.0,
-                "locType" : "grid"
-            }
-        },
-        "of:0000000000000004": {
-            "segmentrouting": {
-                "name": "Leaf2",
-                "ipv4NodeSid": 104,
-                "ipv4Loopback": "192.168.0.204",
-                "routerMac": "c0:ff:ee:00:00:04",
-                "isEdgeRouter": true,
-                "adjacencySids": []
-            },
-            "basic": {
-                "name": "Leaf2",
-                "driver": "ofdpa-ovs",
-                "gridX" : 200.0,
-                "gridY" : 700.0,
-                "locType" : "grid"
-            }
-        },
-        "of:0000000000000005": {
-            "segmentrouting": {
-                "name": "Leaf3",
-                "ipv4NodeSid": 105,
-                "ipv4Loopback": "192.168.0.205",
-                "routerMac": "c0:ff:ee:00:00:05",
-                "isEdgeRouter": true,
-                "adjacencySids": []
-            },
-            "basic": {
-                "name": "Leaf3",
-                "driver": "ofdpa-ovs",
-                "gridX" : 600.0,
-                "gridY" : 700.0,
-                "locType" : "grid"
-            }
-        },
-        "of:0000000000000006": {
-            "segmentrouting": {
-                "name": "Leaf4",
-                "ipv4NodeSid": 106,
-                "ipv4Loopback": "192.168.0.206",
-                "routerMac": "c0:ff:ee:00:00:06",
-                "isEdgeRouter": true,
-                "adjacencySids": []
-            },
-            "basic": {
-                "name": "Leaf4",
-                "driver": "ofdpa-ovs",
-                "gridX" : 1000.0,
-                "gridY" : 700.0,
-                "locType" : "grid"
-            }
-        },
-        "of:0000000000000007": {
-            "segmentrouting": {
-                "name": "Aggregation",
-                "ipv4NodeSid": 107,
-                "ipv4Loopback": "192.168.0.207",
-                "routerMac": "c0:ff:ee:00:00:07",
-                "isEdgeRouter": true,
-                "adjacencySids": []
-            },
-            "basic": {
-                "name": "Aggregation",
-                "driver": "ofdpa-ovs",
-                "gridX" : 400.0,
-                "gridY" : 300.0,
-                "locType" : "grid"
-            }
+  "devices": {
+    "of:0000000000000001": {
+      "segmentrouting": {
+        "name": "Spine1",
+        "ipv4NodeSid": 101,
+        "ipv4Loopback": "192.168.0.201",
+        "routerMac": "c0:ff:ee:00:00:01",
+        "isEdgeRouter": false,
+        "adjacencySids": []
+      },
+      "basic": {
+        "name": "Spine1",
+        "driver": "ofdpa-ovs",
+        "gridX": 200,
+        "gridY": 500,
+        "locType": "grid"
+      }
+    },
+    "of:0000000000000002": {
+      "segmentrouting": {
+        "name": "Spine2",
+        "ipv4NodeSid": 102,
+        "ipv4Loopback": "192.168.0.202",
+        "routerMac": "c0:ff:ee:00:00:02",
+        "isEdgeRouter": false,
+        "adjacencySids": []
+      },
+      "basic": {
+        "name": "Spine2",
+        "driver": "ofdpa-ovs",
+        "gridX": 600,
+        "gridY": 500,
+        "locType": "grid"
+      }
+    },
+    "of:0000000000000003": {
+      "segmentrouting": {
+        "name": "Leaf1",
+        "ipv4NodeSid": 103,
+        "ipv4Loopback": "192.168.0.203",
+        "routerMac": "c0:ff:ee:00:00:03",
+        "isEdgeRouter": true,
+        "adjacencySids": []
+      },
+      "basic": {
+        "name": "Leaf1",
+        "driver": "ofdpa-ovs",
+        "gridX": -200,
+        "gridY": 700,
+        "locType": "grid"
+      }
+    },
+    "of:0000000000000004": {
+      "segmentrouting": {
+        "name": "Leaf2",
+        "ipv4NodeSid": 104,
+        "ipv4Loopback": "192.168.0.204",
+        "routerMac": "c0:ff:ee:00:00:04",
+        "isEdgeRouter": true,
+        "adjacencySids": []
+      },
+      "basic": {
+        "name": "Leaf2",
+        "driver": "ofdpa-ovs",
+        "gridX": 200,
+        "gridY": 700,
+        "locType": "grid"
+      }
+    },
+    "of:0000000000000005": {
+      "segmentrouting": {
+        "name": "Leaf3",
+        "ipv4NodeSid": 105,
+        "ipv4Loopback": "192.168.0.205",
+        "routerMac": "c0:ff:ee:00:00:05",
+        "isEdgeRouter": true,
+        "adjacencySids": []
+      },
+      "basic": {
+        "name": "Leaf3",
+        "driver": "ofdpa-ovs",
+        "gridX": 600,
+        "gridY": 700,
+        "locType": "grid"
+      }
+    },
+    "of:0000000000000006": {
+      "segmentrouting": {
+        "name": "Leaf4",
+        "ipv4NodeSid": 106,
+        "ipv4Loopback": "192.168.0.206",
+        "routerMac": "c0:ff:ee:00:00:06",
+        "isEdgeRouter": true,
+        "adjacencySids": []
+      },
+      "basic": {
+        "name": "Leaf4",
+        "driver": "ofdpa-ovs",
+        "gridX": 1000,
+        "gridY": 700,
+        "locType": "grid"
+      }
+    },
+    "of:0000000000000007": {
+      "segmentrouting": {
+        "name": "Aggregation",
+        "ipv4NodeSid": 107,
+        "ipv4Loopback": "192.168.0.207",
+        "routerMac": "c0:ff:ee:00:00:07",
+        "isEdgeRouter": true,
+        "adjacencySids": []
+      },
+      "basic": {
+        "name": "Aggregation",
+        "driver": "ofdpa-ovs",
+        "gridX": 400,
+        "gridY": 300,
+        "locType": "grid"
+      }
+    }
+  },
+  "ports": {
+    "of:0000000000000003/3": {
+      "interfaces": [
+        {
+          "ips": [
+            "10.1.1.254/24"
+          ],
+          "vlan-untagged": 10
         }
+      ]
     },
-    "ports": {
-        "of:0000000000000003/3": {
-            "interfaces": [ {
-                "ips": [ "10.1.1.254/24" ],
-                "vlan-untagged": 10
-            } ]
-        },
-        "of:0000000000000003/4": {
-            "interfaces": [ {
-                "ips": [ "10.1.1.254/24" ],
-                "vlan-untagged": 10
-            } ]
-        },
-        "of:0000000000000004/3": {
-            "interfaces": [ {
-                "ips": [ "10.1.2.254/24" ],
-                "vlan-untagged": 10
-            } ]
-        },
-        "of:0000000000000004/4": {
-            "interfaces": [ {
-                "ips": [ "10.1.2.254/24" ],
-                "vlan-untagged": 10
-            } ]
-        },
-        "of:0000000000000005/3": {
-            "interfaces": [ {
-                "ips": [ "10.1.3.254/24" ],
-                "vlan-untagged": 10
-            } ]
-        },
-        "of:0000000000000005/4": {
-            "interfaces": [ {
-                "ips": [ "10.1.3.254/24" ],
-                "vlan-untagged": 10
-            } ]
-        },
-        "of:0000000000000006/3": {
-            "interfaces": [ {
-                "ips": [ "10.1.4.254/24" ],
-                "vlan-untagged": 10
-            } ]
-        },
-        "of:0000000000000006/4": {
-            "interfaces": [ {
-                "ips": [ "10.1.4.254/24" ],
-                "vlan-untagged": 10
-            } ]
-        },
-        "of:0000000000000006/5": {
-            "interfaces": [ {
-                "ips": [ "10.1.4.254/24" ],
-                "vlan-untagged": 10
-            } ]
-        },
-        "of:0000000000000007/3": {
-            "interfaces": [ {
-                "ips": [ "10.1.5.254/24" ],
-                "vlan-untagged": 10
-            } ]
-        },
-        "of:0000000000000007/4": {
-            "interfaces": [ {
-                "ips": [ "10.1.5.254/24" ],
-                "vlan-untagged": 10
-            } ]
+    "of:0000000000000003/4": {
+      "interfaces": [
+        {
+          "ips": [
+            "10.1.1.254/24"
+          ],
+          "vlan-untagged": 10
         }
-
+      ]
     },
-    "hosts" : {
-    "C0:FF:EE:00:01:02/None" : {
-      "basic" : {
-        "name" : "h1",
-        "gridX" : -250.0,
-        "gridY" : 900.0,
-        "locType" : "grid"
+    "of:0000000000000004/3": {
+      "interfaces": [
+        {
+          "ips": [
+            "10.1.2.254/24"
+          ],
+          "vlan-untagged": 10
+        }
+      ]
+    },
+    "of:0000000000000004/4": {
+      "interfaces": [
+        {
+          "ips": [
+            "10.1.2.254/24"
+          ],
+          "vlan-untagged": 10
+        }
+      ]
+    },
+    "of:0000000000000005/3": {
+      "interfaces": [
+        {
+          "ips": [
+            "10.1.3.254/24"
+          ],
+          "vlan-untagged": 10
+        }
+      ]
+    },
+    "of:0000000000000005/4": {
+      "interfaces": [
+        {
+          "ips": [
+            "10.1.3.254/24"
+          ],
+          "vlan-untagged": 10
+        }
+      ]
+    },
+    "of:0000000000000006/3": {
+      "interfaces": [
+        {
+          "ips": [
+            "10.1.4.254/24"
+          ],
+          "vlan-untagged": 10
+        }
+      ]
+    },
+    "of:0000000000000006/4": {
+      "interfaces": [
+        {
+          "ips": [
+            "10.1.4.254/24"
+          ],
+          "vlan-untagged": 10
+        }
+      ]
+    },
+    "of:0000000000000006/5": {
+      "interfaces": [
+        {
+          "ips": [
+            "10.1.4.254/24",
+            "192.168.44.254/24"
+          ],
+          "vlan-untagged": 10
+        }
+      ]
+    },
+    "of:0000000000000007/3": {
+      "interfaces": [
+        {
+          "ips": [
+            "10.1.5.254/24"
+          ],
+          "vlan-untagged": 10
+        }
+      ]
+    },
+    "of:0000000000000007/4": {
+      "interfaces": [
+        {
+          "ips": [
+            "10.1.5.254/24"
+          ],
+          "vlan-untagged": 10
+        }
+      ]
+    }
+  },
+  "hosts": {
+    "C0:FF:EE:00:01:02/None": {
+      "basic": {
+        "name": "h1",
+        "gridX": -250,
+        "gridY": 900,
+        "locType": "grid"
       }
     },
-    "C0:FF:EE:00:01:03/None" : {
-      "basic" : {
-        "name" : "management",
-        "gridX" : -150.0,
-        "gridY" : 900.0,
-        "locType" : "grid"
+    "C0:FF:EE:00:01:03/None": {
+      "basic": {
+        "name": "management",
+        "gridX": -150,
+        "gridY": 900,
+        "locType": "grid"
       }
     },
-    "C0:FF:EE:00:02:02/None" : {
-      "basic" : {
-        "name" : "h2",
-        "gridX" : 150.0,
-        "gridY" : 900.0,
-        "locType" : "grid"
+    "C0:FF:EE:00:02:02/None": {
+      "basic": {
+        "name": "h2",
+        "gridX": 150,
+        "gridY": 900,
+        "locType": "grid"
       }
     },
-    "C0:FF:EE:00:02:03/None" : {
-      "basic" : {
-        "name" : "compute1",
-        "gridX" : 250.0,
-        "gridY" : 900.0,
-        "locType" : "grid"
+    "C0:FF:EE:00:02:03/None": {
+      "basic": {
+        "name": "compute1",
+        "gridX": 250,
+        "gridY": 900,
+        "locType": "grid"
       }
     },
-    "C0:FF:EE:00:03:02/None" : {
-      "basic" : {
-        "name" : "h3",
-        "gridX" : 550.0,
-        "gridY" : 900.0,
-        "locType" : "grid"
+    "C0:FF:EE:00:03:02/None": {
+      "basic": {
+        "name": "h3",
+        "gridX": 550,
+        "gridY": 900,
+        "locType": "grid"
       }
     },
-    "C0:FF:EE:00:03:03/None" : {
-      "basic" : {
-        "name" : "compute2",
-        "gridX" : 650.0,
-        "gridY" : 900.0,
-        "locType" : "grid"
+    "C0:FF:EE:00:03:03/None": {
+      "basic": {
+        "name": "compute2",
+        "gridX": 650,
+        "gridY": 900,
+        "locType": "grid"
       }
     },
-    "C0:FF:EE:00:04:02/None" : {
-      "basic" : {
-        "name" : "h4",
-        "gridX" : 900.0,
-        "gridY" : 900.0,
-        "locType" : "grid"
+    "C0:FF:EE:00:04:02/None": {
+      "basic": {
+        "name": "h4",
+        "gridX": 900,
+        "gridY": 900,
+        "locType": "grid"
       }
     },
-    "C0:FF:EE:00:04:03/None" : {
-      "basic" : {
-        "name" : "compute3",
-        "gridX" : 1000.0,
-        "gridY" : 900.0,
-        "locType" : "grid"
+    "C0:FF:EE:00:04:03/None": {
+      "basic": {
+        "name": "compute3",
+        "gridX": 1000,
+        "gridY": 900,
+        "locType": "grid"
       }
     },
-    "C0:FF:EE:00:04:04/None" : {
-      "basic" : {
-        "name" : "olt",
-        "gridX" : 1100.0,
-        "gridY" : 900.0,
-        "locType" : "grid"
+    "C0:FF:EE:00:04:04/None": {
+      "basic": {
+        "name": "olt",
+        "gridX": 1100,
+        "gridY": 900,
+        "locType": "grid"
       }
     },
-    "C0:FF:EE:00:05:02/None" : {
-      "basic" : {
-        "name" : "h5",
-        "gridX" : 350.0,
-        "gridY" : 100.0,
-        "locType" : "grid"
+    "C0:FF:EE:00:05:02/None": {
+      "basic": {
+        "name": "h5",
+        "gridX": 350,
+        "gridY": 100,
+        "locType": "grid"
       }
     },
-    "C0:FF:EE:00:05:03/None" : {
-      "basic" : {
-        "name" : "backoffice",
-        "gridX" : 450.0,
-        "gridY" : 100.0,
-        "locType" : "grid"
+    "C0:FF:EE:00:05:03/None": {
+      "basic": {
+        "name": "backoffice",
+        "gridX": 450,
+        "gridY": 100,
+        "locType": "grid"
+      }
+    }
+  },
+  "apps": {
+    "org.onosproject.segmentrouting": {
+      "xconnect": {
+        "of:0000000000000006": [
+          {
+            "vlan": 222,
+            "ports": [
+              5,
+              2
+            ],
+            "name": "PW_OLTtoSpine"
+          }
+        ],
+        "of:0000000000000002": [
+          {
+            "vlan": 222,
+            "ports": [
+              4,
+              5
+            ],
+            "name": "PW_SpinetoLeaf"
+          }
+        ],
+        "of:0000000000000007": [
+          {
+            "vlan": 222,
+            "ports": [
+              2,
+              4
+            ],
+            "name": "PW_LeaftoBO"
+          }
+        ]
       }
     }
   }

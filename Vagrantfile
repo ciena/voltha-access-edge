@@ -124,10 +124,27 @@ Vagrant.configure("2") do |config|
       end
       olt.vm.network "private_network", ip: "192.168.33.15"
       olt.vm.provision "shell", inline: <<-OLT
+          # Set up the fabric connection
           ip link add gre1 type gretap local 192.168.33.15 remote 192.168.33.10
           ip link set gre1 address c0:ff:ee:00:04:04
           ip link set gre1 up
-          ip addr add 10.1.4.4/24 dev gre1
+
+          # Set up link between ONU and RG
+          sudo ip link add onu_rg type veth peer name rg_onu
+          sudo ip link set onu_rg up
+          sudo ip link set rg_onu up
+  
+          # Set up link for OLT NNI
+          sudo ip link add nni-veth type veth peer name olt-nni-veth
+          sudo ip link set nni-veth up
+          sudo ip link set olt-nni-veth up
+          sudo ip link add dev nni0 type bridge
+          sudo ip link set nni-veth master nni0
+          sudo ip link set gre1 master nni0
+          sudo ip link set nni0 up
+          echo 8 > /sys/class/net/nni0/bridge/group_fwd_mask
+
+          ip addr add 10.1.4.4/24 dev nni0
           ip route add 10.1.1.0/24 via 10.1.4.254
           ip route add 10.1.2.0/24 via 10.1.4.254
           ip route add 10.1.3.0/24 via 10.1.4.254

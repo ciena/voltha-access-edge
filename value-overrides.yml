@@ -12,3 +12,8 @@ onos_env:
 
 freeradius:
   enabled: false
+
+images:
+  vcore:
+    repository: "andybavier/test-image"
+    tag: "voltha"
