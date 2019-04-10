@@ -322,41 +322,5 @@
         "locType": "grid"
       }
     }
-  },
-  "apps": {
-    "org.onosproject.segmentrouting": {
-      "xconnect": {
-        "of:0000000000000006": [
-          {
-            "vlan": 222,
-            "ports": [
-              5,
-              2
-            ],
-            "name": "PW_OLTtoSpine"
-          }
-        ],
-        "of:0000000000000002": [
-          {
-            "vlan": 222,
-            "ports": [
-              4,
-              5
-            ],
-            "name": "PW_SpinetoLeaf"
-          }
-        ],
-        "of:0000000000000007": [
-          {
-            "vlan": 222,
-            "ports": [
-              2,
-              4
-            ],
-            "name": "PW_LeaftoBO"
-          }
-        ]
-      }
-    }
   }
 }

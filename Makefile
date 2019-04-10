@@ -113,7 +113,16 @@ post-onos-olt-config:
 	@until test $$(curl -w '\n%{http_code}' --fail -sSL --user karaf:karaf -X POST -H Content-Type:application/json http://onos-ui:8181/onos/v1/network/configuration --data @/vagrant/olt-onos-netcfg.json 2>/dev/null | tail -1) -eq 200; do echo "Configuring VOLTHA ONOS ..."; sleep 1; done
 
 grant-subscriber-access:
-	@echo "via ONOS CLI volt-add ..."
+	@echo "Granting access to subscriber on QinQ of:0000aabbccddeeff/222/111 ..."
+	@vagrant ssh management -- sshpass -p karaf ssh -p 8101 karaf@onos-ssh \
+		"'volt-add-subscriber-access of:0000aabbccddeeff 128; \
+		  volt-subscribers'"
+	@echo "Create psuedowire from OLT to BNG ..."
+	@vagrant ssh network -- sshpass -p karaf ssh -p 8101 karaf@localhost \
+		"'sr-xconnect-add of:0000000000000007 222 2 4; \
+		  sr-xconnect-add of:0000000000000006 222 2 5; \
+		  sr-xconnect-add of:0000000000000002 222 4 5; \
+		  sr-xconnect'"
 
 helm-voltha: # helm-kafka helm-etcd-operator helm-onos
 	@echo "Waiting for etcd-operator to initialize ..." 
@@ -126,3 +135,9 @@ test-authenticate:
 test-dhcp:
 	docker exec -ti rg dhclient -4 -v -i eth0
 	docker exec -ti rg ip addr show eth0
+
+test-ping:
+	docker exec -ti rg ping 192.168.44.1
+
+test-tcpdump:
+	sudo tcpdump -nei gre1.222.111

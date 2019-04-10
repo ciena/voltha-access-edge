@@ -56,12 +56,8 @@ if [ "$node" = "backoffice" ]; then
     sudo ovs-vsctl add-br dhcp0
     sudo ovs-vsctl set bridge dhcp0 other-config:datapath-id=0000000000000001
     sudo ovs-vsctl set-controller dhcp0 tcp:10.1.3.3:31653
-    sudo ip link add dhcp-veth type veth peer name int-dhcp-veth
-    sudo ip link set dhcp-veth up
-    sudo ip link set int-dhcp-veth up
     sudo ovs-vsctl add-port dhcp0 dhcp-veth 
     sudo /vagrant/pipework int-dhcp-veth -i eth5 backoffice_dhcpd_1 0.0.0.0/32
-    #sudo ovs-ofctl -O OpenFlow13 add-flow dhcp0 in_port=1,dl_vlan=222,actions=CONTROLLER:65535
 
     # Need to wait for docker container to be running
     until test "$(docker inspect backoffice_dhcpd_1 -f '{{.State.Status}}')" = "running"; do \
@@ -73,12 +69,6 @@ if [ "$node" = "backoffice" ]; then
     docker exec backoffice_dhcpd_1 ip link set eth5.222 up
     docker exec backoffice_dhcpd_1 ip link set eth5.222.111 up
     docker exec backoffice_dhcpd_1 ip addr add 192.168.44.2/24 dev eth5.222.111
-
-    #docker exec backoffice_dhcpd_1 ip link add link eth5 name eth5.2 type vlan id 2
-    #docker exec backoffice_dhcpd_1 ip link add link eth5.2 name eth5.2.128 type vlan id 128
-    #docker exec backoffice_dhcpd_1 ip link set eth5.2 up
-    #docker exec backoffice_dhcpd_1 ip link set eth5.2.128 up
-    #docker exec backoffice_dhcpd_1 ip addr add 192.168.44.2/24 dev eth5.2.128
 fi
 
 if [ "$node" = "olt" ]; then

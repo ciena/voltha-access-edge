@@ -170,6 +170,18 @@ Vagrant.configure("2") do |config|
           ip route add 10.1.2.0/24 via 10.1.5.254
           ip route add 10.1.3.0/24 via 10.1.5.254
           ip route add 10.1.4.0/24 via 10.1.5.254
+
+          # Set up VETH to DHCP relay interface into DHCP container
+          ip link add dhcp-veth type veth peer name int-dhcp-veth
+          ip link set dhcp-veth up
+          ip link set int-dhcp-veth up
+
+          # Set up double tagged interface for BNG
+          ip link add link gre1 name gre1.222 type vlan id 222
+          ip link set gre1.222 up
+          ip link add link gre1.222 name gre1.222.111 type vlan id 111
+          ip link set gre1.222.111 up
+          ip addr add 192.168.44.1/24 dev gre1.222.111
           ufw disable
       BO
       olt.vm.provision "shell", path: "provision.sh", args: [ "backoffice", rancher_version ]

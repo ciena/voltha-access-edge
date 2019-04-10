@@ -461,6 +461,34 @@ EAPOL: SUPP_BE entering state IDLE
 EAPOL authentication completed - result=SUCCESS
 ```
 
+## Grant Subscriber Access
+After the subscriber has been authorized and before `DHCP` `IP` negotiation can
+begin the subscriber must have access granted in `ONOS`. This is accomplished
+first by issuing a `volt-add-subscriber-access` command to the `ONOS` instance
+that is managing the `OLT`s. This command alone is enough to enable `DHCP`, but
+in addition to this a `psuedowire` also needs to be established to allow 
+double-tagged packets from the `OLT` to be forwarded to the `BNG`. The creation
+of the `psuedowire` is achieved by creating 3 `x-connects` across the `Trellis`
+fabric by issuing `sr-xconnect-add` commands to the `ONOS` instance managing
+the `Trellis` fabric.
+
+All the required steps to grant the subscriber access and creating of the 
+`psuedowire` by issuing the following command against the host on which 
+the `vagrant` machines where created.
+```
+make grant-subscriber-access
+```
+
+**Output:**
+```
+Granting access to subscriber on QinQ of:0000aabbccddeeff/222/111 ...
+port=of:0000aabbccddeeff/128, svlan=222, cvlan=111
+Create psuedowire from OLT to BNG ...
+XconnectDesc{key=XconnectKey{deviceId=of:0000000000000007, vlanId=222}, ports=[2, 4]}
+XconnectDesc{key=XconnectKey{deviceId=of:0000000000000006, vlanId=222}, ports=[2, 5]}
+XconnectDesc{key=XconnectKey{deviceId=of:0000000000000002, vlanId=222}, ports=[4, 5]}
+```
+
 ## DHCP Address Allocation Subscriber Test
 To test the DHCP capability, the following `test-dhcp` make target can be used.
 ```
@@ -493,6 +521,16 @@ docker exec -ti rg ip addr show eth0
        valid_lft forever preferred_lft forever
 ```
 
+## Ping IP Gateway (WIP)
+The residential gateway (RG) is configured with an IP gateway address of
+`192.168.44.1`. In a deployment this would be the IP address of the BNG through
+which all the RG traffic sent. To emulate this a double tagged interface is
+created on the backoffice VM, i.e. gre1.222.111. If you ping `192.168.44.1` from
+the RG the ARP will show up on this interface on the `backoffice` VM. 
+
+An ARP reply will be returned and visible on the `nni0` interface on the `OLT`
+VM.  Currently, the ARP reply does not get through the `OLT` and `ONU` to the
+RG.
 
 # Details
 ## IP Addressing
