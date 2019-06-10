@@ -23,7 +23,11 @@ ansible-playbook -i inventory/voltha/hosts.ini --become --become-user=root clust
 mkdir -p /home/vagrant/.kube
 sudo cp /etc/kubernetes/admin.conf /home/vagrant/.kube/config
 sudo chown vagrant:vagrant /home/vagrant/.kube/config
-sudo snap install helm --classic
+WORKDIR=$(mktemp -d)
+wget -O $WORKDIR/get_helm.sh https://git.io/get_helm.sh 
+chmod 755 $WORKDIR/get_helm.sh
+sudo $WORKDIR/get_helm.sh --version v2.14.1
+rm -rf $WORKDIR
 kubectl completion bash | sudo tee >/dev/null  /etc/bash_completion.d/kubectl
 helm completion bash | sudo tee >/dev/null  /etc/bash_completion.d/helm
 DNS=$(kubectl get -n  kube-system svc coredns -o go-template='{{.spec.clusterIP}}')
